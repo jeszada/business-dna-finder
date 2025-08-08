@@ -14,7 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      questions: {
+        Row: {
+          business_weights: Json
+          category: Database["public"]["Enums"]["question_category"]
+          created_at: string
+          id: string
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          business_weights?: Json
+          category: Database["public"]["Enums"]["question_category"]
+          created_at?: string
+          id: string
+          text: string
+          updated_at?: string
+        }
+        Update: {
+          business_weights?: Json
+          category?: Database["public"]["Enums"]["question_category"]
+          created_at?: string
+          id?: string
+          text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +49,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      question_category: "skills" | "preferences" | "readiness" | "motivation"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +176,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      question_category: ["skills", "preferences", "readiness", "motivation"],
+    },
   },
 } as const
