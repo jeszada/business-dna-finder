@@ -1,13 +1,43 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import SEO from "@/components/SEO";
 
 const Index = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Prefetch font rendering by touching tokens via a tiny style read
+    void getComputedStyle(document.documentElement).getPropertyValue("--primary");
+  }, []);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <>
+      <SEO
+        title="BAA | แบบประเมินความเหมาะสมทางธุรกิจ"
+        description="ทำแบบประเมิน 4 หมวด เพื่อค้นหา Top 3 ประเภทธุรกิจที่เหมาะกับคุณ"
+      />
+      <main className="min-h-screen flex items-center justify-center bg-background">
+        <section className="w-full max-w-xl p-6 sm:p-8">
+          <header className="mb-6">
+            <p className="text-sm text-muted-foreground">Business Suitability Assessment</p>
+            <h1 className="text-3xl font-bold tracking-tight mt-1">แบบประเมินความเหมาะสมทางธุรกิจ</h1>
+          </header>
+          <article className="rounded-xl bg-secondary p-6 sm:p-8 shadow-elev">
+            <h2 className="sr-only">คำอธิบายแบบประเมิน</h2>
+            <p className="text-base text-muted-foreground">
+              ค้นพบ DNA ทางธุรกิจของคุณผ่านแบบทดสอบ 4 หมวดหลัก เพื่อหา<br className="hidden sm:block" />
+              ประเภทธุรกิจที่เหมาะสมที่สุด และตัดสินใจได้อย่างมั่นใจ
+            </p>
+            <div className="mt-6">
+              <Button size="lg" className="w-full bg-gradient-primary text-primary-foreground" onClick={() => navigate("/survey")}> 
+                เริ่มประเมิน DNA ทางธุรกิจ
+              </Button>
+            </div>
+          </article>
+        </section>
+      </main>
+    </>
   );
 };
 
