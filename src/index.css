@@ -52,7 +52,7 @@ All colors MUST be HSL.
 
     /* Premium tokens */
     --progress: 320 85% 65%;
-    --progress-background: 220 14% 96%;
+    --progress-background: 220 14% 88%;
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary) / 0.95), hsl(var(--accent)));
     --shadow-elev: 0 10px 30px -12px hsl(var(--primary) / 0.35);
     --shadow-glow: 0 0 40px hsl(var(--accent) / 0.35);
