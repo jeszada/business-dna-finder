@@ -125,7 +125,7 @@ const Results = () => {
           </div>
 
           <footer className="mt-8 text-xs text-muted-foreground">
-            ระบบใช้ข้อมูลจริง {questions.length} คำถาม จากฐานข้อมูล
+            ระบบอ้างอิงจาก 336 คำถามที่ครอบคลุม 14 ประเภทธุรกิจ
           </footer>
         </section>
       </main>
