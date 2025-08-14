@@ -116,7 +116,7 @@ const Survey = () => {
           ) : (
             <Card className="shadow-elev">
               <CardContent className="p-6">
-                <h1 className="text-xl font-semibold mb-2">{q.text}</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold mb-2 leading-relaxed">{q.text}</h1>
                 <p className="text-sm text-muted-foreground mb-4">เลือกระดับที่ตรงกับความรู้สึกของคุณมากที่สุด</p>
 
                 <div className="grid grid-cols-5 gap-3">
