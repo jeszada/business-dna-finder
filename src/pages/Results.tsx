@@ -7,6 +7,7 @@ import { AnswerMap, computeScores, topNBusinesses } from "@/lib/scoring";
 import { BUSINESS_TYPES, Category, BusinessType } from "@/data/business";
 import { useNavigate } from "react-router-dom";
 import { fetchQuestionsFromDatabase } from "@/lib/questionService";
+import { Crown, Medal, Award } from "lucide-react";
 
 const STORAGE_KEY = "bsa-progress";
 
@@ -93,17 +94,36 @@ const Results = () => {
 
           <h2 className="text-xl font-bold mb-3">3 อันดับ ประเภทธุรกิจที่เหมาะกับคุณ</h2>
           <div className="space-y-3 mb-6">
-            {top3.map(([name, score], i) => (
-              <Card key={name} className={`border-2 ${i===0 ? "border-ring" : ""}`}>
-                <CardContent className="p-4 flex items-center gap-3">
-                  <div className="h-10 w-10 shrink-0 rounded-full bg-secondary flex items-center justify-center font-bold">{i+1}</div>
-                  <div className="flex-1">
-                    <p className="font-semibold">{name}</p>
-                  </div>
-                  <div className="text-sm font-semibold">{score}%</div>
-                </CardContent>
-              </Card>
-            ))}
+            {top3.map(([name, score], i) => {
+              const isFirst = i === 0;
+              const icons = [Crown, Medal, Award];
+              const IconComponent = icons[i];
+              
+              return (
+                <Card 
+                  key={name} 
+                  className={`${isFirst ? 
+                    "border-2 border-primary bg-gradient-to-r from-primary/5 to-accent/5 shadow-lg" : 
+                    "border border-border"
+                  } ${isFirst ? "scale-105" : ""} transition-all`}
+                >
+                  <CardContent className={`${isFirst ? "p-6" : "p-4"} flex items-center gap-3`}>
+                    <div className={`${isFirst ? "h-12 w-12" : "h-10 w-10"} shrink-0 rounded-full ${isFirst ? "bg-gradient-to-r from-primary to-accent" : "bg-secondary"} flex items-center justify-center ${isFirst ? "text-white" : ""}`}>
+                      {isFirst ? (
+                        <IconComponent size={isFirst ? 24 : 20} className="text-white" />
+                      ) : (
+                        <span className="font-bold">{i+1}</span>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className={`${isFirst ? "text-lg" : ""} font-semibold ${isFirst ? "text-primary" : ""}`}>{name}</p>
+                      {isFirst && <p className="text-xs text-primary/70 font-medium">✨ ประเภทธุรกิจที่เหมาะสมที่สุด</p>}
+                    </div>
+                    <div className={`${isFirst ? "text-lg" : "text-sm"} font-semibold ${isFirst ? "text-primary" : ""}`}>{score}%</div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
           <h3 className="text-lg font-semibold mb-2">คะแนนแยกตามหมวดหมู่</h3>
