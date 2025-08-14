@@ -35,7 +35,7 @@ const Index = () => {
             <img 
               src={heroImage} 
               alt="Business Assessment Logo" 
-              className="w-32 h-32 mx-auto rounded-full object-cover shadow-lg"
+              className="w-32 h-32 mx-auto object-cover"
             />
           </div>
           
