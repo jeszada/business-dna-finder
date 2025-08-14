@@ -68,80 +68,77 @@ const Dashboard = () => {
   }
 
   return (
-      <>
-        <SEO 
-          title="Report - Business Assessment Analytics"
-          description="รายงานสถิติและข้อมูลการประเมินความเหมาะสมทางธุรกิจ"
-        />
-        <div className="min-h-screen bg-background">
-          <header className="bg-card border-b border-border">
-            <div className="container mx-auto px-4 py-4">
-              <div className="flex items-center gap-4">
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/">
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    กลับหน้าหลัก
-                  </Link>
-                </Button>
-                <h1 className="text-2xl font-bold text-foreground">Report</h1>
-              </div>
+    <>
+      <SEO 
+        title="Report - Business Assessment Analytics"
+        description="รายงานสถิติและข้อมูลการประเมินความเหมาะสมทางธุรกิจ"
+      />
+      <div className="min-h-screen bg-background">
+        {/* Mobile-optimized header */}
+        <header className="bg-card border-b border-border sticky top-0 z-10">
+          <div className="px-3 py-3">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="sm" asChild className="p-2">
+                <Link to="/">
+                  <ArrowLeft className="h-4 w-4" />
+                </Link>
+              </Button>
+              <h1 className="text-lg font-bold text-foreground">รายงานสถิติ</h1>
             </div>
-          </header>
+          </div>
+        </header>
 
-        <main className="container mx-auto px-4 py-8">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">การประเมินทั้งหมด</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{totalAssessments.toLocaleString()}</div>
-                <p className="text-xs text-muted-foreground">
-                  +12% จากเดือนที่แล้ว
-                </p>
-              </CardContent>
+        <main className="px-3 py-4 space-y-4">
+          {/* Mobile-first stats cards */}
+          <div className="grid grid-cols-1 gap-3">
+            <Card className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">การประเมินทั้งหมด</p>
+                  <p className="text-2xl font-bold">{totalAssessments.toLocaleString()}</p>
+                </div>
+                <Users className="h-8 w-8 text-primary" />
+              </div>
             </Card>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">ธุรกิจยอดนิยม</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{businessStats[0]?.businessType.split('ธุรกิจ')[1] || 'ไม่มีข้อมูล'}</div>
-                <p className="text-xs text-muted-foreground">
-                  {businessStats[0]?.count || 0} คน ({businessStats[0]?.percentage || 0}%)
-                </p>
-              </CardContent>
+            <Card className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">ธุรกิจยอดนิยม</p>
+                  <p className="text-lg font-bold leading-tight">
+                    {businessStats[0]?.businessType.replace('ธุรกิจ', '') || 'ไม่มีข้อมูล'}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {businessStats[0]?.count || 0} คน ({businessStats[0]?.percentage || 0}%)
+                  </p>
+                </div>
+                <TrendingUp className="h-8 w-8 text-primary" />
+              </div>
             </Card>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">ประเภทธุรกิจ</CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{BUSINESS_TYPES.length}</div>
-                <p className="text-xs text-muted-foreground">
-                  ประเภทที่ให้เลือก
-                </p>
-              </CardContent>
+            <Card className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">ประเภทธุรกิจ</p>
+                  <p className="text-2xl font-bold">{BUSINESS_TYPES.length}</p>
+                  <p className="text-xs text-muted-foreground">ประเภทที่ให้เลือก</p>
+                </div>
+                <BarChart3 className="h-8 w-8 text-primary" />
+              </div>
             </Card>
           </div>
 
-            {/* Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Bar Chart */}
+          {/* Mobile-optimized charts */}
+          <div className="space-y-4">
+            {/* Top Business Types Chart */}
             <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">ธุรกิจยอดนิยม 5 อันดับแรก</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base">ธุรกิจยอดนิยม 5 อันดับแรก</CardTitle>
                 <CardDescription className="text-sm">
                   จำนวนคนที่เหมาะสมกับแต่ละประเภทธุรกิจ
                 </CardDescription>
               </CardHeader>
-              <CardContent className="pb-4">
+              <CardContent className="pb-3">
                 <ChartContainer
                   config={{
                     count: {
@@ -149,39 +146,40 @@ const Dashboard = () => {
                       color: "hsl(var(--primary))",
                     },
                   }}
-                  className="h-[300px] sm:h-[350px]"
+                  className="h-[280px]"
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart 
                       data={topBusinessTypes} 
                       margin={{ 
-                        top: 20, 
-                        right: 15, 
+                        top: 10, 
+                        right: 5, 
                         left: 5, 
-                        bottom: 100 
+                        bottom: 80 
                       }}
                     >
                       <XAxis 
                         dataKey="businessType" 
-                        tick={{ fontSize: 10 }}
+                        tick={{ fontSize: 9 }}
                         angle={-45}
                         textAnchor="end"
-                        height={100}
+                        height={80}
                         interval={0}
                         axisLine={false}
                         tickLine={false}
                       />
                       <YAxis 
-                        tick={{ fontSize: 10 }} 
+                        tick={{ fontSize: 9 }} 
                         axisLine={false}
                         tickLine={false}
+                        width={30}
                       />
                       <ChartTooltip content={<ChartTooltipContent />} />
                       <Bar 
                         dataKey="count" 
                         fill="hsl(var(--primary))" 
-                        radius={[4, 4, 0, 0]}
-                        maxBarSize={60}
+                        radius={[3, 3, 0, 0]}
+                        maxBarSize={40}
                       />
                     </BarChart>
                   </ResponsiveContainer>
@@ -191,20 +189,20 @@ const Dashboard = () => {
 
             {/* Pie Chart */}
             <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">สัดส่วนความเหมาะสมทางธุรกิจ</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base">สัดส่วนความเหมาะสมทางธุรกิจ</CardTitle>
                 <CardDescription className="text-sm">
                   เปอร์เซ็นต์การกระจายตัวของประเภทธุรกิจ
                 </CardDescription>
               </CardHeader>
-              <CardContent className="pb-4">
+              <CardContent className="pb-3">
                 <ChartContainer
                   config={{
                     percentage: {
                       label: "เปอร์เซ็นต์",
                     },
                   }}
-                  className="h-[300px] sm:h-[350px]"
+                  className="h-[280px]"
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -212,15 +210,15 @@ const Dashboard = () => {
                         data={businessStats}
                         cx="50%"
                         cy="50%"
-                        outerRadius="70%"
+                        outerRadius="65%"
                         innerRadius="0%"
                         fill="#8884d8"
                         dataKey="percentage"
-                        label={({ businessType, percentage }) => 
-                          percentage > 5 ? `${percentage}%` : ''
+                        label={({ percentage }) => 
+                          percentage > 4 ? `${percentage}%` : ''
                         }
                         labelLine={false}
-                        fontSize={10}
+                        fontSize={9}
                       >
                         {businessStats.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -231,9 +229,9 @@ const Dashboard = () => {
                           if (active && payload && payload.length) {
                             const data = payload[0].payload;
                             return (
-                              <div className="bg-background border border-border rounded-lg p-3 shadow-lg text-sm max-w-[250px]">
-                                <p className="font-medium text-foreground break-words">{data.businessType}</p>
-                                <p className="text-muted-foreground mt-1">
+                              <div className="bg-background border border-border rounded-lg p-3 shadow-lg text-sm max-w-[280px]">
+                                <p className="font-medium text-foreground break-words text-xs">{data.businessType}</p>
+                                <p className="text-muted-foreground mt-1 text-xs">
                                   {data.count} คน ({data.percentage}%)
                                 </p>
                               </div>
@@ -249,47 +247,43 @@ const Dashboard = () => {
             </Card>
           </div>
 
-          {/* Detailed Table */}
-          <Card className="mt-8">
-            <CardHeader>
-              <CardTitle>รายละเอียดทุกประเภทธุรกิจ</CardTitle>
-              <CardDescription>
+          {/* Mobile-optimized table */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">รายละเอียดทุกประเภทธุรกิจ</CardTitle>
+              <CardDescription className="text-sm">
                 ข้อมูลครบถ้วนของการประเมินความเหมาะสมทางธุรกิจ
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left py-2 px-2 font-medium">ประเภทธุรกิจ</th>
-                      <th className="text-right py-2 px-2 font-medium">จำนวนคน</th>
-                      <th className="text-right py-2 px-2 font-medium">เปอร์เซ็นต์</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {businessStats.length > 0 ? businessStats.map((item, index) => (
-                      <tr key={index} className="border-b border-border/50">
-                        <td className="py-2 px-2 text-xs">{item.businessType}</td>
-                        <td className="py-2 px-2 text-right font-medium text-xs">{item.count}</td>
-                        <td className="py-2 px-2 text-right text-xs">
-                          <span className="inline-flex items-center px-1 py-0.5 rounded-full text-xs bg-primary/10 text-primary">
-                            {item.percentage}%
-                          </span>
-                        </td>
-                      </tr>
-                    )) : (
-                      <tr>
-                        <td colSpan={3} className="py-4 text-center text-muted-foreground text-sm">
-                          ยังไม่มีข้อมูลการประเมิน
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+            <CardContent className="pb-3">
+              <div className="space-y-2">
+                {businessStats.length > 0 ? businessStats.map((item, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-foreground truncate">
+                        {item.businessType}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {item.count} คน
+                      </p>
+                    </div>
+                    <div className="ml-3 flex-shrink-0">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary/10 text-primary font-medium">
+                        {item.percentage}%
+                      </span>
+                    </div>
+                  </div>
+                )) : (
+                  <div className="py-8 text-center">
+                    <p className="text-sm text-muted-foreground">ยังไม่มีข้อมูลการประเมิน</p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
+
+          {/* Mobile padding bottom */}
+          <div className="h-4"></div>
         </main>
       </div>
     </>
