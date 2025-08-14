@@ -25,7 +25,7 @@ export const fetchQuestionsFromDatabase = async (): Promise<Question[]> => {
   }
 };
 
-export const getRandomQuestions = (questions: Question[], count: number = 30): Question[] => {
+export const getRandomQuestions = (questions: Question[], count: number = 40): Question[] => {
   if (questions.length <= count) {
     return questions;
   }
