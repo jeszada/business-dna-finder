@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
-import { Sparkles, TrendingUp, Target } from "lucide-react";
+import { Sparkles, TrendingUp } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -45,32 +45,11 @@ const Index = () => {
             
             {/* Main card */}
             <div className="relative rounded-xl bg-card/95 backdrop-blur-sm border border-border/50 p-6 sm:p-8 shadow-elev hover:shadow-glow transition-all duration-500">
-              <div className="flex items-start gap-4 mb-6">
-                <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
-                  <Target className="h-6 w-6 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-xl font-semibold mb-2 text-foreground">ค้นพบ DNA ทางธุรกิจของคุณ</h2>
-                  <p className="text-muted-foreground leading-relaxed">
-                    ผ่านแบบทดสอบ 4 หมวดหลัก เพื่อหาประเภทธุรกิจที่เหมาะสมที่สุด และตัดสินใจได้อย่างมั่นใจ
-                  </p>
-                </div>
-              </div>
-
-              {/* Features grid */}
-              <div className="grid grid-cols-3 gap-3 mb-6">
-                <div className="text-center p-3 rounded-lg bg-primary/5 border border-primary/10">
-                  <div className="text-2xl font-bold text-primary">30</div>
-                  <div className="text-xs text-muted-foreground">คำถาม</div>
-                </div>
-                <div className="text-center p-3 rounded-lg bg-accent/5 border border-accent/10">
-                  <div className="text-2xl font-bold text-accent">14</div>
-                  <div className="text-xs text-muted-foreground">ประเภทธุรกิจ</div>
-                </div>
-                <div className="text-center p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
-                  <div className="text-2xl font-bold text-emerald-600">5</div>
-                  <div className="text-xs text-muted-foreground">นาที</div>
-                </div>
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold mb-3 text-foreground">ค้นพบ DNA ทางธุรกิจของคุณ</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  ผ่านแบบทดสอบ 4 หมวดหลัก เพื่อหาประเภทธุรกิจที่เหมาะสมที่สุด และตัดสินใจได้อย่างมั่นใจ
+                </p>
               </div>
 
               <div className="space-y-3">
