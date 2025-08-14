@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
+import { Sparkles, TrendingUp, Target } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -26,32 +27,72 @@ const Index = () => {
         title="BSA | แบบประเมินความเหมาะสมทางธุรกิจ"
         description="ทำแบบประเมิน 4 หมวด เพื่อค้นหา Top 3 ประเภทธุรกิจที่เหมาะกับคุณ"
       />
-      <main className="min-h-screen flex items-center justify-center bg-background">
+      <main className="min-h-screen flex items-center justify-center bg-background bg-gradient-to-br from-background via-background to-primary/5">
         <section className="w-full max-w-xl p-6 sm:p-8">
-          <header className="mb-6">
-            <p className="text-sm text-muted-foreground">Business Suitability Assessment</p>
-            <h1 className="text-3xl font-bold tracking-tight mt-1">แบบประเมินความเหมาะสมทางธุรกิจ</h1>
+          <header className="mb-8 text-center animate-fade-in">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <p className="text-sm text-muted-foreground font-medium">Business Suitability Assessment</p>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              แบบประเมินความเหมาะสม<br />ทางธุรกิจ
+            </h1>
           </header>
-          <article className="rounded-xl bg-secondary p-6 sm:p-8 shadow-elev">
-            <h2 className="sr-only">คำอธิบายแบบประเมิน</h2>
-            <p className="text-base text-muted-foreground">
-              ค้นพบ DNA ทางธุรกิจของคุณผ่านแบบทดสอบ 4 หมวดหลัก เพื่อหา<br className="hidden sm:block" />
-              ประเภทธุรกิจที่เหมาะสมที่สุด และตัดสินใจได้อย่างมั่นใจ
-            </p>
-            <div className="mt-6 space-y-3">
-              <Button size="lg" className="w-full bg-gradient-primary text-primary-foreground" onClick={() => navigate("/survey")}> 
-                เริ่มประเมิน DNA ทางธุรกิจ
-              </Button>
-              {hasResults && (
+          
+          <article className="relative group animate-scale-in">
+            {/* Background glow effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+            
+            {/* Main card */}
+            <div className="relative rounded-xl bg-card/95 backdrop-blur-sm border border-border/50 p-6 sm:p-8 shadow-elev hover:shadow-glow transition-all duration-500">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
+                  <Target className="h-6 w-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold mb-2 text-foreground">ค้นพบ DNA ทางธุรกิจของคุณ</h2>
+                  <p className="text-muted-foreground leading-relaxed">
+                    ผ่านแบบทดสอบ 4 หมวดหลัก เพื่อหาประเภทธุรกิจที่เหมาะสมที่สุด และตัดสินใจได้อย่างมั่นใจ
+                  </p>
+                </div>
+              </div>
+
+              {/* Features grid */}
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="text-center p-3 rounded-lg bg-primary/5 border border-primary/10">
+                  <div className="text-2xl font-bold text-primary">30</div>
+                  <div className="text-xs text-muted-foreground">คำถาม</div>
+                </div>
+                <div className="text-center p-3 rounded-lg bg-accent/5 border border-accent/10">
+                  <div className="text-2xl font-bold text-accent">14</div>
+                  <div className="text-xs text-muted-foreground">ประเภทธุรกิจ</div>
+                </div>
+                <div className="text-center p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
+                  <div className="text-2xl font-bold text-emerald-600">5</div>
+                  <div className="text-xs text-muted-foreground">นาที</div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="w-full" 
-                  onClick={() => navigate("/results")}
-                >
-                  ดูผลลัพธ์ล่าสุด
+                  className="w-full bg-gradient-primary text-primary-foreground hover:scale-105 transition-transform duration-200 font-medium" 
+                  onClick={() => navigate("/survey")}
+                > 
+                  <TrendingUp className="mr-2 h-5 w-5" />
+                  เริ่มประเมิน DNA ทางธุรกิจ
                 </Button>
-              )}
+                {hasResults && (
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="w-full border-primary/20 hover:bg-primary/5 hover:border-primary/30 transition-colors duration-200" 
+                    onClick={() => navigate("/results")}
+                  >
+                    ดูผลลัพธ์ล่าสุด
+                  </Button>
+                )}
+              </div>
             </div>
           </article>
         </section>
