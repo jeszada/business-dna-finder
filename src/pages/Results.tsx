@@ -117,7 +117,6 @@ const Results = () => {
                     </div>
                     <div className="flex-1">
                       <p className={`${isFirst ? "text-lg" : ""} font-semibold ${isFirst ? "text-primary" : ""}`}>{name}</p>
-                      {isFirst && <p className="text-xs text-primary/70 font-medium">✨ ประเภทธุรกิจที่เหมาะสมที่สุด</p>}
                     </div>
                     <div className={`${isFirst ? "text-lg" : "text-sm"} font-semibold ${isFirst ? "text-primary" : ""}`}>{score}%</div>
                   </CardContent>
