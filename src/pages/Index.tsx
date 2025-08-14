@@ -28,8 +28,8 @@ const Index = () => {
         title="BSA | แบบประเมินความเหมาะสมทางธุรกิจ"
         description="ทำแบบประเมิน 4 หมวด เพื่อค้นหา Top 3 ประเภทธุรกิจที่เหมาะกับคุณ"
       />
-      <main className="min-h-screen flex items-center justify-center bg-background bg-gradient-to-br from-background via-background to-primary/5">
-        <section className="w-full max-w-xl p-6 sm:p-8">
+      <main className="min-h-screen flex items-center justify-center bg-background bg-gradient-to-br from-background via-background to-primary/5 py-8">
+        <section className="w-full max-w-xl p-6 sm:p-8 -mt-16">
           {/* Logo Image */}
           <div className="mb-8 text-center animate-fade-in">
             <img 
