@@ -3,10 +3,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
-import { sampleQuestions } from "@/data/sampleQuestions";
 import { AnswerMap, computeScores, topNBusinesses } from "@/lib/scoring";
-import { BUSINESS_TYPES, Category } from "@/data/business";
+import { BUSINESS_TYPES, Category, BusinessType } from "@/data/business";
 import { useNavigate } from "react-router-dom";
+import { fetchQuestionsFromDatabase } from "@/lib/questionService";
 
 const STORAGE_KEY = "baa-progress";
 
@@ -29,14 +29,54 @@ const categoryLabels: Record<Category, string> = {
 const Results = () => {
   const navigate = useNavigate();
   const [answers] = useState<AnswerMap>(() => loadProgress());
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const data = useMemo(() => computeScores(sampleQuestions, answers), [answers]);
+  useEffect(() => {
+    const loadQuestions = async () => {
+      try {
+        const fetchedQuestions = await fetchQuestionsFromDatabase();
+        setQuestions(fetchedQuestions);
+      } catch (error) {
+        console.error('Failed to load questions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadQuestions();
+  }, []);
+
+  const data = useMemo(() => {
+    if (questions.length === 0) {
+      const emptyBusinessScores = {} as Record<BusinessType, number>;
+      BUSINESS_TYPES.forEach(business => {
+        emptyBusinessScores[business] = 0;
+      });
+      const emptyCategoryAverages = {} as Record<Category, number>;
+      Object.keys(categoryLabels).forEach(category => {
+        emptyCategoryAverages[category as Category] = 0;
+      });
+      return { businessScores: emptyBusinessScores, categoryAverages: emptyCategoryAverages };
+    }
+    return computeScores(questions, answers);
+  }, [questions, answers]);
+  
   const top3 = useMemo(() => topNBusinesses(data.businessScores, 3), [data]);
 
   useEffect(() => {
     // If user lands here without answers, redirect
     if (Object.keys(answers).length === 0) navigate("/survey");
   }, [answers, navigate]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p>กำลังคำนวณผลลัพธ์...</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <>
@@ -85,7 +125,7 @@ const Results = () => {
           </div>
 
           <footer className="mt-8 text-xs text-muted-foreground">
-            หมายเหตุ: ระบบเดโม่กำลังใช้คำถามตัวอย่างชั่วคราว เมื่อเชื่อมฐานข้อมูลจะดึงคำถามจริงจาก Google Sheet และบันทึกผลแบบถาวร
+            ระบบใช้ข้อมูลจริง {questions.length} คำถาม จากฐานข้อมูล
           </footer>
         </section>
       </main>
