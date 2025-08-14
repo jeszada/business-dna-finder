@@ -18,8 +18,8 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 224 71% 4%;
 
-    /* Brand — Indigo/Violet blend */
-    --primary: 258 84% 54%;
+    /* Brand — Based on CI colors */
+    --primary: 249 53% 40%;        /* #322968 */
     --primary-foreground: 210 40% 98%;
 
     --secondary: 220 14% 96%;
@@ -28,7 +28,7 @@ All colors MUST be HSL.
     --muted: 220 14% 96%;
     --muted-foreground: 215 16% 46%;
 
-    --accent: 222 88% 55%;
+    --accent: 210 60% 39%;         /* #2666A0 */
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84% 60%;
@@ -36,14 +36,14 @@ All colors MUST be HSL.
 
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 258 84% 54%;
+    --ring: 249 53% 40%;               /* Match primary */
 
     --radius: 0.75rem;
 
     /* Sidebar */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5% 26%;
-    --sidebar-primary: 258 84% 54%;
+    --sidebar-primary: 249 53% 40%;   /* Match primary */
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 240 5% 96%;
     --sidebar-accent-foreground: 240 6% 10%;
@@ -51,9 +51,9 @@ All colors MUST be HSL.
     --sidebar-ring: 217 91% 60%;
 
     /* Premium tokens */
-    --progress: 320 85% 65%;
+    --progress: 320 75% 65%;           /* Pink complement to CI colors */
     --progress-background: 220 14% 88%;
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary) / 0.95), hsl(var(--accent)));
+    --gradient-primary: linear-gradient(135deg, hsl(249 53% 40%), hsl(210 60% 39%)); /* CI gradient */
     --shadow-elev: 0 10px 30px -12px hsl(var(--primary) / 0.35);
     --shadow-glow: 0 0 40px hsl(var(--accent) / 0.35);
     --transition-smooth: all 220ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -69,7 +69,7 @@ All colors MUST be HSL.
     --popover: 224 71% 6.5%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 258 100% 70%;
+    --primary: 249 60% 65%;            /* Lighter version for dark mode */
     --primary-foreground: 224 71% 6.5%;
 
     --secondary: 225 14% 16%;
@@ -78,7 +78,7 @@ All colors MUST be HSL.
     --muted: 225 14% 16%;
     --muted-foreground: 215 20% 66%;
 
-    --accent: 222 95% 68%;
+    --accent: 210 70% 55%;             /* Lighter blue for dark mode */
     --accent-foreground: 224 71% 6.5%;
 
     --destructive: 0 63% 31%;
@@ -86,18 +86,18 @@ All colors MUST be HSL.
 
     --border: 225 14% 16%;
     --input: 225 14% 16%;
-    --ring: 258 100% 70%;
+    --ring: 249 60% 65%;               /* Match primary dark mode */
 
     --sidebar-background: 240 6% 10%;
     --sidebar-foreground: 240 5% 96%;
-    --sidebar-primary: 258 100% 70%;
+    --sidebar-primary: 249 60% 65%;   /* Match primary dark mode */
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 4% 16%;
     --sidebar-accent-foreground: 240 5% 96%;
     --sidebar-border: 240 4% 16%;
     --sidebar-ring: 217 91% 60%;
     
-    --progress: 320 90% 70%;
+    --progress: 320 80% 70%;           /* Lighter pink for dark mode */
     --progress-background: 225 14% 16%;
   }
 }
