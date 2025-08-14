@@ -32,57 +32,64 @@ export async function getAssessmentStatistics(): Promise<{
   businessTypeStats: Array<{ businessType: BusinessType; count: number; percentage: number }>;
 }> {
   try {
+    // Use the secure database function to get aggregated statistics
     const { data, error } = await supabase
-      .from('assessment_results')
-      .select('all_business_scores');
+      .rpc('get_assessment_statistics');
 
     if (error) {
       console.error('Error fetching assessment statistics:', error);
       throw error;
     }
 
-    if (!data || data.length === 0) {
-      return {
-        totalAssessments: 0,
-        businessTypeStats: []
-      };
-    }
-
-    // Count total assessments
-    const totalAssessments = data.length;
-
-    // Aggregate business type counts
-    const businessTypeCounts: Record<string, number> = {};
-    
-    data.forEach(result => {
-      const scores = result.all_business_scores as Record<BusinessType, number>;
-      // Find the highest scoring business type for this assessment
-      const topBusinessType = Object.entries(scores)
-        .sort(([,a], [,b]) => b - a)[0]?.[0];
-      
-      if (topBusinessType) {
-        businessTypeCounts[topBusinessType] = (businessTypeCounts[topBusinessType] || 0) + 1;
-      }
-    });
-
-    // Convert to array with percentages
-    const businessTypeStats = Object.entries(businessTypeCounts)
-      .map(([businessType, count]) => ({
-        businessType: businessType as BusinessType,
-        count,
-        percentage: Math.round((count / totalAssessments) * 100)
-      }))
-      .sort((a, b) => b.count - a.count);
+    // Type assertion for the returned data
+    const result = data as {
+      totalAssessments: number;
+      businessTypeStats: Array<{ businessType: BusinessType; count: number; percentage: number }>;
+    };
 
     return {
-      totalAssessments,
-      businessTypeStats
+      totalAssessments: result.totalAssessments || 0,
+      businessTypeStats: result.businessTypeStats || []
     };
   } catch (error) {
-    console.error('Failed to get assessment statistics:', error);
+    console.error('Failed to fetch assessment statistics:', error);
+    // Return empty data as fallback
     return {
       totalAssessments: 0,
       businessTypeStats: []
     };
+  }
+}
+
+export async function getAssessmentResultBySessionId(sessionId: string): Promise<AssessmentResult | null> {
+  try {
+    const { data, error } = await supabase
+      .from('assessment_results')
+      .select('*')
+      .eq('session_id', sessionId)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // No rows found
+        return null;
+      }
+      console.error('Error fetching assessment result:', error);
+      throw error;
+    }
+
+    // Type assertion and transformation for the returned data
+    return {
+      id: data.id,
+      session_id: data.session_id,
+      top_business_types: data.top_business_types as Array<{ business_type: BusinessType; score: number }>,
+      category_scores: data.category_scores as Record<Category, number>,
+      all_business_scores: data.all_business_scores as Record<BusinessType, number>,
+      answers: data.answers as Record<string, number>,
+      created_at: data.created_at
+    };
+  } catch (error) {
+    console.error('Failed to fetch assessment result:', error);
+    return null;
   }
 }
