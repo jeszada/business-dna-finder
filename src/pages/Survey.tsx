@@ -31,7 +31,7 @@ const labels = ["ต่ำมาก", "ต่ำ", "ปานกลาง", "ส
 const Survey = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [answers, setAnswers] = useState<AnswerMap>(() => loadProgress());
+  const [answers, setAnswers] = useState<AnswerMap>({});
   const [index, setIndex] = useState(0);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,6 +43,11 @@ const Survey = () => {
         const allQuestions = await fetchQuestionsFromDatabase();
         const selectedQuestions = getRandomQuestions(allQuestions, 20);
         setQuestions(selectedQuestions);
+        
+        // Clear previous answers when new questions are loaded
+        setAnswers({});
+        localStorage.removeItem(STORAGE_KEY);
+        setIndex(0);
       } catch (error) {
         console.error('Failed to load questions:', error);
         toast({
