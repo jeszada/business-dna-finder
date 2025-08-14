@@ -80,6 +80,15 @@ const Index = () => {
                     ดูผลลัพธ์ล่าสุด
                   </Button>
                 )}
+                <Button 
+                  size="lg" 
+                  variant="secondary" 
+                  className="w-full" 
+                  onClick={() => navigate("/dashboard")}
+                >
+                  <Sparkles className="mr-2 h-5 w-5" />
+                  ดู Dashboard
+                </Button>
               </div>
             </div>
           </article>
