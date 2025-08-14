@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { BUSINESS_TYPES } from "@/data/business";
 import SEO from "@/components/SEO";
 
+
 // Mock data for demo purposes - in real app this would come from Supabase
 const mockAssessmentData = [
   { businessType: "ธุรกิจเทคโนโลยีและนวัตกรรม", count: 45, percentage: 18 },
