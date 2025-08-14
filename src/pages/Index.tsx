@@ -35,7 +35,7 @@ const Index = () => {
               <p className="text-sm text-muted-foreground font-medium">Business Suitability Assessment</p>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              แบบประเมินความเหมาะสม<br />ทางธุรกิจ
+              แบบประเมินความเหมาะสมทางธุรกิจ
             </h1>
           </header>
           
