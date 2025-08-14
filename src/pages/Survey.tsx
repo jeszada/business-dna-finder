@@ -41,7 +41,7 @@ const Survey = () => {
     const loadQuestions = async () => {
       try {
         const allQuestions = await fetchQuestionsFromDatabase();
-        const selectedQuestions = getRandomQuestions(allQuestions, 20);
+        const selectedQuestions = getRandomQuestions(allQuestions, 30);
         setQuestions(selectedQuestions);
         
         // Clear previous answers when new questions are loaded
