@@ -123,16 +123,21 @@ const Survey = () => {
                   {[1,2,3,4,5].map((n) => {
                     const active = answers[q.id] === n;
                     return (
-                      <Button
+                      <button
                         key={n}
-                        variant={active ? "default" : "secondary"}
                         onClick={() => choose(n)}
-                        className={`h-14 text-lg ${active ? "ring-2 ring-ring" : ""}`}
+                        className={`
+                          h-14 rounded-lg border-2 text-lg font-semibold transition-all duration-200
+                          ${active 
+                            ? "border-primary bg-primary/10 text-primary shadow-md scale-105" 
+                            : "border-border bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
+                          }
+                        `}
                         aria-pressed={active}
                         aria-label={`ให้คะแนน ${n} (${labels[n-1]})`}
                       >
                         {n}
-                      </Button>
+                      </button>
                     );
                   })}
                 </div>
