@@ -65,7 +65,7 @@ const Index = () => {
                   <Button 
                     size="lg" 
                     variant="outline" 
-                    className="w-full border-primary/20 hover:bg-primary/5 hover:border-primary/30 transition-colors duration-200" 
+                    className="w-full border-primary/30 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-200" 
                     onClick={() => navigate("/results")}
                   >
                     ดูผลลัพธ์ล่าสุด
