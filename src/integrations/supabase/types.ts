@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      assessment_results: {
+        Row: {
+          all_business_scores: Json
+          answers: Json
+          category_scores: Json
+          created_at: string
+          id: string
+          session_id: string
+          top_business_types: Json
+          updated_at: string
+        }
+        Insert: {
+          all_business_scores: Json
+          answers: Json
+          category_scores: Json
+          created_at?: string
+          id?: string
+          session_id?: string
+          top_business_types: Json
+          updated_at?: string
+        }
+        Update: {
+          all_business_scores?: Json
+          answers?: Json
+          category_scores?: Json
+          created_at?: string
+          id?: string
+          session_id?: string
+          top_business_types?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       questions: {
         Row: {
           business_weights: Json

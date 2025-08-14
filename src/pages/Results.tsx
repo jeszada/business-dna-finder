@@ -7,6 +7,7 @@ import { AnswerMap, computeScores, topNBusinesses } from "@/lib/scoring";
 import { BUSINESS_TYPES, Category, BusinessType } from "@/data/business";
 import { useNavigate } from "react-router-dom";
 import { fetchQuestionsFromDatabase } from "@/lib/questionService";
+import { saveAssessmentResult } from "@/lib/assessmentService";
 import { Crown, Medal, Award } from "lucide-react";
 
 const STORAGE_KEY = "bsa-progress";
@@ -63,6 +64,25 @@ const Results = () => {
   }, [questions, answers]);
   
   const top3 = useMemo(() => topNBusinesses(data.businessScores, 3), [data]);
+
+  // Save assessment result to database
+  useEffect(() => {
+    const saveResults = async () => {
+      if (Object.keys(answers).length > 0 && questions.length > 0) {
+        try {
+          await saveAssessmentResult({
+            top_business_types: top3.map(([business_type, score]) => ({ business_type, score })),
+            category_scores: data.categoryAverages,
+            all_business_scores: data.businessScores,
+            answers
+          });
+        } catch (error) {
+          console.error('Failed to save assessment result:', error);
+        }
+      }
+    };
+    saveResults();
+  }, [answers, questions, top3, data]);
 
   useEffect(() => {
     // If user lands here without answers, redirect
