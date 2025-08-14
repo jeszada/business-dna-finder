@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
 import { Sparkles, TrendingUp } from "lucide-react";
+import heroImage from "@/assets/hero-image.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -45,6 +46,15 @@ const Index = () => {
             
             {/* Main card */}
             <div className="relative rounded-xl bg-card/95 backdrop-blur-sm border border-border/50 p-6 sm:p-8 shadow-elev hover:shadow-glow transition-all duration-500">
+              {/* Hero Image */}
+              <div className="mb-6 rounded-lg overflow-hidden">
+                <img 
+                  src={heroImage} 
+                  alt="Business Assessment Hero" 
+                  className="w-full h-48 object-cover"
+                />
+              </div>
+              
               <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-3 text-foreground">ค้นพบ DNA ทางธุรกิจของคุณ</h2>
                 <p className="text-muted-foreground leading-relaxed">
