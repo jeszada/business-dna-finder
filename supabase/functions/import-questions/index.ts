@@ -26,7 +26,98 @@ const businessMapping: Record<string, string> = {
   'ธุรกิจซื้อขายสินค้า': 'ธุรกิจการค้า',
   'ธุรกิจสุขภาพ / ความงาม': 'ธุรกิจสุขภาพ/ความงาม',
   'ธุรกิจเกษตรกรรม': 'ธุรกิจการเกษตร',
+  // Keep exact matches as they are
+  'ธุรกิจบริการ': 'ธุรกิจบริการ',
+  'ธุรกิจอาหารและเครื่องดื่ม': 'ธุรกิจอาหารและเครื่องดื่ม',
+  'ธุรกิจการเงินและการลงทุน': 'ธุรกิจการเงินและการลงทุน',
+  'ธุรกิจเทคโนโลยีและนวัตกรรม': 'ธุรกิจเทคโนโลยีและนวัตกรรม',
+  'ธุรกิจโลจิสติกส์และซัพพลายเชน': 'ธุรกิจโลจิสติกส์และซัพพลายเชน',
+  'ธุรกิจการตลาดและโฆษณา': 'ธุรกิจการตลาดและโฆษณา',
+  'ธุรกิจสิ่งแวดล้อม': 'ธุรกิจสิ่งแวดล้อม',
+  'ธุรกิจระหว่างประเทศ': 'ธุรกิจระหว่างประเทศ',
+  'ธุรกิจสร้างสรรค์และสื่อ': 'ธุรกิจสร้างสรรค์และสื่อ',
+  'ธุรกิจท่องเที่ยว': 'ธุรกิจท่องเที่ยว',
+  'ธุรกิจเพื่อสังคม': 'ธุรกิจเพื่อสังคม',
 }
+
+// Cross-business relationships for more realistic weights
+const getWeightsForBusiness = (primaryBusiness: string, keyAttributes: string): Record<string, number> => {
+  const weights: Record<string, number> = {};
+  
+  // Primary business gets full weight
+  weights[primaryBusiness] = 1.0;
+  
+  // Add related business weights based on key attributes and common patterns
+  const attr = keyAttributes.toLowerCase();
+  
+  switch (primaryBusiness) {
+    case 'ธุรกิจการตลาดและโฆษณา':
+      if (attr.includes('คิดสร้างสรรค์') || attr.includes('เนื้อหา')) {
+        weights['ธุรกิจสร้างสรรค์และสื่อ'] = 0.7;
+      }
+      if (attr.includes('เข้าใจลูกค้า') || attr.includes('คุยกับลูกค้า')) {
+        weights['ธุรกิจบริการ'] = 0.5;
+      }
+      if (attr.includes('วิเคราะห์')) {
+        weights['ธุรกิจเทคโนโลยีและนวัตกรรม'] = 0.4;
+      }
+      break;
+      
+    case 'ธุรกิจบริการ':
+      if (attr.includes('ดูแลลูกค้า') || attr.includes('คุยและเข้าสังคม')) {
+        weights['ธุรกิจการตลาดและโฆษณา'] = 0.5;
+        weights['ธุรกิจท่องเที่ยว'] = 0.6;
+      }
+      if (attr.includes('สุขภาพ') || attr.includes('ความงาม')) {
+        weights['ธุรกิจสุขภาพ/ความงาม'] = 0.7;
+      }
+      break;
+      
+    case 'ธุรกิจการค้า':
+      if (attr.includes('จัดการสต็อก') || attr.includes('ซัพพลาย')) {
+        weights['ธุรกิจโลจิสติกส์และซัพพลายเชน'] = 0.6;
+      }
+      if (attr.includes('วิเคราะห์ตลาด') || attr.includes('เจรจา')) {
+        weights['ธุรกิจการตลาดและโฆษณา'] = 0.5;
+      }
+      if (attr.includes('ต่างประเทศ')) {
+        weights['ธุรกิจระหว่างประเทศ'] = 0.8;
+      }
+      break;
+      
+    case 'ธุรกิจเทคโนโลยีและนวัตกรรม':
+      if (attr.includes('วิเคราะห์') || attr.includes('ข้อมูล')) {
+        weights['ธุรกิจการเงินและการลงทุน'] = 0.5;
+      }
+      if (attr.includes('การตลาด')) {
+        weights['ธุรกิจการตลาดและโฆษณา'] = 0.4;
+      }
+      break;
+      
+    case 'ธุรกิจการเงินและการลงทุน':
+      if (attr.includes('วิเคราะห์') || attr.includes('ข้อมูล')) {
+        weights['ธุรกิจเทคโนโลยีและนวัตกรรม'] = 0.5;
+      }
+      break;
+      
+    case 'ธุรกิจสร้างสรรค์และสื่อ':
+      if (attr.includes('การตลาด') || attr.includes('เล่าเรื่อง')) {
+        weights['ธุรกิจการตลาดและโฆษณา'] = 0.7;
+      }
+      break;
+      
+    case 'ธุรกิจโลจิสติกส์และซัพพลายเชน':
+      if (attr.includes('จัดการ') || attr.includes('วางแผน')) {
+        weights['ธุรกิจการค้า'] = 0.6;
+      }
+      if (attr.includes('เทคโนโลยี')) {
+        weights['ธุรกิจเทคโนโลยีและนวัตกรรม'] = 0.4;
+      }
+      break;
+  }
+  
+  return weights;
+};
 
 function standardizeBusinessName(business: string): string {
   return businessMapping[business] || business;
@@ -80,9 +171,8 @@ Deno.serve(async (req) => {
         continue
       }
       
-      // Create business weights - give 1.0 to the matching business
-      const businessWeights: Record<string, number> = {}
-      businessWeights[standardBusiness] = 1.0
+      // Create realistic business weights using key attributes
+      const businessWeights = getWeightsForBusiness(standardBusiness, keyAttributes.trim());
       
       const question = {
         id: generateQuestionId(questionIndex),
