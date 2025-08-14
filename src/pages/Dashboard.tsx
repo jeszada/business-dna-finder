@@ -55,8 +55,8 @@ const Dashboard = () => {
     return (
       <>
         <SEO 
-          title="Dashboard - Business Assessment Analytics"
-          description="ดูสถิติและข้อมูลการประเมินความเหมาะสมทางธุรกิจ"
+          title="Report - Business Assessment Analytics"
+          description="รายงานสถิติและข้อมูลการประเมินความเหมาะสมทางธุรกิจ"
         />
         <div className="min-h-screen bg-background flex items-center justify-center">
           <div className="text-center">
@@ -68,25 +68,25 @@ const Dashboard = () => {
   }
 
   return (
-    <>
-      <SEO 
-        title="Dashboard - Business Assessment Analytics"
-        description="ดูสถิติและข้อมูลการประเมินความเหมาะสมทางธุรกิจ"
-      />
-      <div className="min-h-screen bg-background">
-        <header className="bg-card border-b border-border">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  กลับหน้าหลัก
-                </Link>
-              </Button>
-              <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+      <>
+        <SEO 
+          title="Report - Business Assessment Analytics"
+          description="รายงานสถิติและข้อมูลการประเมินความเหมาะสมทางธุรกิจ"
+        />
+        <div className="min-h-screen bg-background">
+          <header className="bg-card border-b border-border">
+            <div className="container mx-auto px-4 py-4">
+              <div className="flex items-center gap-4">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/">
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    กลับหน้าหลัก
+                  </Link>
+                </Button>
+                <h1 className="text-2xl font-bold text-foreground">Report</h1>
+              </div>
             </div>
-          </div>
-        </header>
+          </header>
 
         <main className="container mx-auto px-4 py-8">
           {/* Stats Cards */}
