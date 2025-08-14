@@ -47,7 +47,7 @@ const SEO = ({ title, description, canonical, jsonLd }: SEOProps) => {
       jsonLd || {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        name: "Business Aptitude Assessment (BAA)",
+        name: "Business Suitability Assessment (BSA)",
         applicationCategory: "BusinessApplication",
         inLanguage: "th-TH",
         url: window.location.href,

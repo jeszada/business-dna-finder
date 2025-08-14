@@ -9,7 +9,7 @@ import { Question } from "@/data/business";
 import { AnswerMap } from "@/lib/scoring";
 import { useToast } from "@/hooks/use-toast";
 
-const STORAGE_KEY = "baa-progress";
+const STORAGE_KEY = "bsa-progress";
 
 function loadProgress(): AnswerMap {
   try {
@@ -85,7 +85,7 @@ const Survey = () => {
   return (
     <>
       <SEO
-        title="ทำแบบประเมิน | BAA"
+        title="ทำแบบประเมิน | BSA"
         description="ตอบคำถามแบบ Likert 1-5 ครบทั้ง 4 หมวด พร้อมบันทึกชั่วคราวอัตโนมัติ"
       />
       <main className="min-h-screen bg-background">

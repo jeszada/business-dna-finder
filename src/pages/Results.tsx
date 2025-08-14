@@ -8,7 +8,7 @@ import { BUSINESS_TYPES, Category, BusinessType } from "@/data/business";
 import { useNavigate } from "react-router-dom";
 import { fetchQuestionsFromDatabase } from "@/lib/questionService";
 
-const STORAGE_KEY = "baa-progress";
+const STORAGE_KEY = "bsa-progress";
 
 function loadProgress(): AnswerMap {
   try {
@@ -81,7 +81,7 @@ const Results = () => {
   return (
     <>
       <SEO
-        title="ผลลัพธ์แบบประเมิน | BAA"
+        title="ผลลัพธ์แบบประเมิน | BSA"
         description="สรุป Top 3 ประเภทธุรกิจที่เหมาะกับคุณ พร้อมคะแนนหมวด 4 เรื่อง"
       />
       <main className="min-h-screen bg-background">

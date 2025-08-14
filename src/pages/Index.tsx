@@ -14,7 +14,7 @@ const Index = () => {
   return (
     <>
       <SEO
-        title="BAA | แบบประเมินความเหมาะสมทางธุรกิจ"
+        title="BSA | แบบประเมินความเหมาะสมทางธุรกิจ"
         description="ทำแบบประเมิน 4 หมวด เพื่อค้นหา Top 3 ประเภทธุรกิจที่เหมาะกับคุณ"
       />
       <main className="min-h-screen flex items-center justify-center bg-background">
