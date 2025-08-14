@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import SEO from "@/components/SEO";
-import { sampleQuestions } from "@/data/sampleQuestions";
+import { fetchQuestionsFromDatabase, getRandomQuestions } from "@/lib/questionService";
+import { Question } from "@/data/business";
 import { AnswerMap } from "@/lib/scoring";
+import { useToast } from "@/hooks/use-toast";
 
 const STORAGE_KEY = "baa-progress";
 
@@ -28,14 +30,37 @@ const labels = ["ต่ำมาก", "ต่ำ", "ปานกลาง", "ส
 
 const Survey = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [answers, setAnswers] = useState<AnswerMap>(() => loadProgress());
   const [index, setIndex] = useState(0);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const questions = sampleQuestions;
+  // Load questions from database on component mount
+  useEffect(() => {
+    const loadQuestions = async () => {
+      try {
+        const allQuestions = await fetchQuestionsFromDatabase();
+        const selectedQuestions = getRandomQuestions(allQuestions, 20);
+        setQuestions(selectedQuestions);
+      } catch (error) {
+        console.error('Failed to load questions:', error);
+        toast({
+          title: "เกิดข้อผิดพลาด",
+          description: "ไม่สามารถโหลดคำถามได้ กรุณาลองใหม่อีกครั้ง",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadQuestions();
+  }, [toast]);
+
   const q = questions[index];
-
   const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
-  const progress = Math.round((answeredCount / questions.length) * 100);
+  const progress = questions.length > 0 ? Math.round((answeredCount / questions.length) * 100) : 0;
 
   useEffect(() => {
     saveProgress(answers);
@@ -68,39 +93,56 @@ const Survey = () => {
             <Progress value={progress} className="mt-3" />
           </header>
 
-          <Card className="shadow-elev">
-            <CardContent className="p-6">
-              <h1 className="text-xl font-semibold mb-2">{q.text}</h1>
-              <p className="text-sm text-muted-foreground mb-4">เลือกระดับที่ตรงกับความรู้สึกของคุณมากที่สุด</p>
-
-              <div className="grid grid-cols-5 gap-3">
-                {[1,2,3,4,5].map((n) => {
-                  const active = answers[q.id] === n;
-                  return (
-                    <Button
-                      key={n}
-                      variant={active ? "default" : "secondary"}
-                      onClick={() => choose(n)}
-                      className={`h-14 text-lg ${active ? "ring-2 ring-ring" : ""}`}
-                      aria-pressed={active}
-                      aria-label={`ให้คะแนน ${n} (${labels[n-1]})`}
-                    >
-                      {n}
-                    </Button>
-                  );
-                })}
-              </div>
-
-              <div className="flex items-center justify-between mt-6">
-                <Button variant="secondary" onClick={goBack} disabled={index===0}>
-                  ← ย้อนกลับ
+          {isLoading ? (
+            <Card className="shadow-elev">
+              <CardContent className="p-6 text-center">
+                <p>กำลังโหลดคำถาม...</p>
+              </CardContent>
+            </Card>
+          ) : !q ? (
+            <Card className="shadow-elev">
+              <CardContent className="p-6 text-center">
+                <p>ไม่พบคำถาม กรุณาลองใหม่อีกครั้ง</p>
+                <Button onClick={() => window.location.reload()} className="mt-2">
+                  โหลดใหม่
                 </Button>
-                <Button onClick={goNext}>
-                  {index === questions.length - 1 ? "ดูผลลัพธ์" : "ถัดไป →"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="shadow-elev">
+              <CardContent className="p-6">
+                <h1 className="text-xl font-semibold mb-2">{q.text}</h1>
+                <p className="text-sm text-muted-foreground mb-4">เลือกระดับที่ตรงกับความรู้สึกของคุณมากที่สุด</p>
+
+                <div className="grid grid-cols-5 gap-3">
+                  {[1,2,3,4,5].map((n) => {
+                    const active = answers[q.id] === n;
+                    return (
+                      <Button
+                        key={n}
+                        variant={active ? "default" : "secondary"}
+                        onClick={() => choose(n)}
+                        className={`h-14 text-lg ${active ? "ring-2 ring-ring" : ""}`}
+                        aria-pressed={active}
+                        aria-label={`ให้คะแนน ${n} (${labels[n-1]})`}
+                      >
+                        {n}
+                      </Button>
+                    );
+                  })}
+                </div>
+
+                <div className="flex items-center justify-between mt-6">
+                  <Button variant="secondary" onClick={goBack} disabled={index===0}>
+                    ← ย้อนกลับ
+                  </Button>
+                  <Button onClick={goNext}>
+                    {index === questions.length - 1 ? "ดูผลลัพธ์" : "ถัดไป →"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </section>
       </main>
     </>
