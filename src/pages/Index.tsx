@@ -30,9 +30,17 @@ const Index = () => {
       />
       <main className="min-h-screen flex items-center justify-center bg-background bg-gradient-to-br from-background via-background to-primary/5">
         <section className="w-full max-w-xl p-6 sm:p-8">
+          {/* Logo Image */}
+          <div className="mb-8 text-center animate-fade-in">
+            <img 
+              src={heroImage} 
+              alt="Business Assessment Logo" 
+              className="w-32 h-32 mx-auto rounded-full object-cover shadow-lg"
+            />
+          </div>
+          
           <header className="mb-8 text-center animate-fade-in">
             <div className="flex items-center justify-center gap-2 mb-3">
-              <Sparkles className="h-5 w-5 text-primary" />
               <p className="text-sm text-muted-foreground font-medium">Business Suitability Assessment</p>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -46,15 +54,6 @@ const Index = () => {
             
             {/* Main card */}
             <div className="relative rounded-xl bg-card/95 backdrop-blur-sm border border-border/50 p-6 sm:p-8 shadow-elev hover:shadow-glow transition-all duration-500">
-              {/* Hero Image */}
-              <div className="mb-6 rounded-lg overflow-hidden">
-                <img 
-                  src={heroImage} 
-                  alt="Business Assessment Hero" 
-                  className="w-full h-48 object-cover"
-                />
-              </div>
-              
               <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-3 text-foreground">ค้นพบ DNA ทางธุรกิจของคุณ</h2>
                 <p className="text-muted-foreground leading-relaxed">
