@@ -131,17 +131,17 @@ const Dashboard = () => {
             </Card>
           </div>
 
-          {/* Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Charts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Bar Chart */}
             <Card>
-              <CardHeader>
-                <CardTitle>ธุรกิจยอดนิยม 5 อันดับแรก</CardTitle>
-                <CardDescription>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg">ธุรกิจยอดนิยม 5 อันดับแรก</CardTitle>
+                <CardDescription className="text-sm">
                   จำนวนคนที่เหมาะสมกับแต่ละประเภทธุรกิจ
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pb-4">
                 <ChartContainer
                   config={{
                     count: {
@@ -149,21 +149,40 @@ const Dashboard = () => {
                       color: "hsl(var(--primary))",
                     },
                   }}
-                  className="h-[250px] sm:h-[300px]"
+                  className="h-[300px] sm:h-[350px]"
                 >
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={topBusinessTypes} margin={{ top: 20, right: 10, left: 10, bottom: 60 }}>
+                    <BarChart 
+                      data={topBusinessTypes} 
+                      margin={{ 
+                        top: 20, 
+                        right: 15, 
+                        left: 5, 
+                        bottom: 100 
+                      }}
+                    >
                       <XAxis 
                         dataKey="businessType" 
-                        tick={{ fontSize: 8 }}
+                        tick={{ fontSize: 10 }}
                         angle={-45}
                         textAnchor="end"
-                        height={80}
+                        height={100}
                         interval={0}
+                        axisLine={false}
+                        tickLine={false}
                       />
-                      <YAxis tick={{ fontSize: 10 }} />
+                      <YAxis 
+                        tick={{ fontSize: 10 }} 
+                        axisLine={false}
+                        tickLine={false}
+                      />
                       <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="count" fill="hsl(var(--primary))" radius={2} />
+                      <Bar 
+                        dataKey="count" 
+                        fill="hsl(var(--primary))" 
+                        radius={[4, 4, 0, 0]}
+                        maxBarSize={60}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </ChartContainer>
@@ -172,20 +191,20 @@ const Dashboard = () => {
 
             {/* Pie Chart */}
             <Card>
-              <CardHeader>
-                <CardTitle>สัดส่วนความเหมาะสมทางธุรกิจ</CardTitle>
-                <CardDescription>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg">สัดส่วนความเหมาะสมทางธุรกิจ</CardTitle>
+                <CardDescription className="text-sm">
                   เปอร์เซ็นต์การกระจายตัวของประเภทธุรกิจ
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pb-4">
                 <ChartContainer
                   config={{
                     percentage: {
                       label: "เปอร์เซ็นต์",
                     },
                   }}
-                  className="h-[250px] sm:h-[300px]"
+                  className="h-[300px] sm:h-[350px]"
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -193,13 +212,15 @@ const Dashboard = () => {
                         data={businessStats}
                         cx="50%"
                         cy="50%"
-                        outerRadius={60}
+                        outerRadius="70%"
+                        innerRadius="0%"
                         fill="#8884d8"
                         dataKey="percentage"
                         label={({ businessType, percentage }) => 
-                          percentage > 8 ? `${percentage}%` : ''
+                          percentage > 5 ? `${percentage}%` : ''
                         }
                         labelLine={false}
+                        fontSize={10}
                       >
                         {businessStats.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -210,9 +231,9 @@ const Dashboard = () => {
                           if (active && payload && payload.length) {
                             const data = payload[0].payload;
                             return (
-                              <div className="bg-background border border-border rounded-lg p-2 shadow-lg text-xs">
-                                <p className="font-medium text-foreground text-wrap max-w-[200px]">{data.businessType}</p>
-                                <p className="text-muted-foreground">
+                              <div className="bg-background border border-border rounded-lg p-3 shadow-lg text-sm max-w-[250px]">
+                                <p className="font-medium text-foreground break-words">{data.businessType}</p>
+                                <p className="text-muted-foreground mt-1">
                                   {data.count} คน ({data.percentage}%)
                                 </p>
                               </div>
