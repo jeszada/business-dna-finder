@@ -103,19 +103,23 @@ const Dashboard = () => {
                   let bgClass = "bg-muted/30";
                   let rankBgClass = "bg-primary/10";
                   let rankTextClass = "text-primary";
+                  let percentageBgClass = "bg-primary/10 text-primary";
                   
                   if (isFirst) {
-                    bgClass = "bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-700";
-                    rankBgClass = "bg-gradient-to-r from-yellow-400 to-yellow-500";
+                    bgClass = "bg-gradient-to-r from-primary/20 to-primary/15 border border-primary/30";
+                    rankBgClass = "bg-primary";
                     rankTextClass = "text-white";
+                    percentageBgClass = "bg-primary/20 text-primary font-semibold";
                   } else if (isSecond) {
-                    bgClass = "bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/40 dark:to-gray-700/40 border border-gray-200 dark:border-gray-600";
-                    rankBgClass = "bg-gradient-to-r from-gray-400 to-gray-500";
+                    bgClass = "bg-gradient-to-r from-primary/15 to-primary/10 border border-primary/20";
+                    rankBgClass = "bg-primary/80";
                     rankTextClass = "text-white";
+                    percentageBgClass = "bg-primary/15 text-primary font-medium";
                   } else if (isThird) {
-                    bgClass = "bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border border-orange-200 dark:border-orange-700";
-                    rankBgClass = "bg-gradient-to-r from-orange-400 to-orange-500";
+                    bgClass = "bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/15";
+                    rankBgClass = "bg-primary/60";
                     rankTextClass = "text-white";
+                    percentageBgClass = "bg-primary/10 text-primary";
                   }
                   
                   return (
@@ -136,12 +140,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className="ml-3 flex-shrink-0">
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                          isFirst ? 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-300' :
-                          isSecond ? 'bg-gray-500/20 text-gray-700 dark:text-gray-300' :
-                          isThird ? 'bg-orange-500/20 text-orange-700 dark:text-orange-300' :
-                          'bg-primary/10 text-primary'
-                        }`}>
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${percentageBgClass}`}>
                           {item.percentage}%
                         </span>
                       </div>
