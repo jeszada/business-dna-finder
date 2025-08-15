@@ -114,10 +114,21 @@ const Survey = () => {
               </CardContent>
             </Card>
           ) : (
-            <Card className="shadow-elev">
-              <CardContent className="p-6">
-                <h1 className="text-xl sm:text-2xl font-semibold mb-2 leading-relaxed">{q.text}</h1>
-                <p className="text-sm text-muted-foreground mb-4">เลือกระดับที่ตรงกับความรู้สึกของคุณมากที่สุด</p>
+            <>
+              <div className="mb-4 p-4 bg-muted/50 rounded-lg">
+                <p className="text-sm text-foreground leading-relaxed">
+                  เลือกระดับที่ตรงกับความรู้สึกของคุณจาก 1 ถึง 5 เลือกตัวเลขที่ 
+                  <span className="font-medium text-primary"> "ใกล้ความจริงของคุณที่สุด" </span>
+                  เพื่อให้ระบบวิเคราะห์ได้แม่นยำ โดย 
+                  <span className="font-medium"> 1 คือ "น้อยมาก หรือไม่ค่อยตรงกับตัวคุณ" </span>
+                  และ 
+                  <span className="font-medium"> 5 คือ "มากที่สุด หรือตรงกับตัวคุณมาก" </span>
+                </p>
+              </div>
+              
+              <Card className="shadow-elev">
+                <CardContent className="p-6">
+                  <h1 className="text-xl sm:text-2xl font-semibold mb-6 leading-relaxed">{q.text}</h1>
 
                 <div className="grid grid-cols-5 gap-3">
                   {[1,2,3,4,5].map((n) => {
@@ -142,16 +153,17 @@ const Survey = () => {
                   })}
                 </div>
 
-                <div className="flex items-center justify-between mt-6">
+                 <div className="flex items-center justify-between mt-6">
                   <Button variant="secondary" onClick={goBack} disabled={index===0}>
                     ← ย้อนกลับ
                   </Button>
-                  <Button onClick={goNext}>
+                  <Button onClick={goNext} disabled={!q || answers[q.id] === undefined}>
                     {index === questions.length - 1 ? "ดูผลลัพธ์" : "ถัดไป →"}
                   </Button>
                 </div>
               </CardContent>
             </Card>
+            </>
           )}
         </section>
       </main>
