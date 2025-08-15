@@ -150,19 +150,34 @@ Deno.serve(async (req) => {
     }
 
     // Parse the text data into structured format
-    const lines = rawData.trim().split('\n')
+    const lines = rawData.trim().split('\n').filter(line => line.trim())
     const questions: any[] = []
     
     let questionIndex = 0
-    for (const line of lines) {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim()
+      
       // Skip header row for CSV
-      if (isCSV && questionIndex === 0 && (line.includes('ธุรกิจ') || line.includes('Business'))) {
+      if (isCSV && i === 0 && (line.includes('Business') || line.includes('ธุรกิจ'))) {
+        console.log('Skipping header row:', line)
         continue;
       }
       
       // Split by comma for CSV, tab for TSV
-      const parts = isCSV ? line.split(',').map(p => p.trim().replace(/^"|"$/g, '')) : line.split('\t')
-      if (parts.length !== 4) continue
+      let parts: string[]
+      if (isCSV) {
+        // Handle CSV with proper quote parsing
+        parts = line.split(',').map(p => p.trim().replace(/^["']|["']$/g, ''))
+      } else {
+        parts = line.split('\t')
+      }
+      
+      console.log(`Processing line ${i}: parts count = ${parts.length}`, parts)
+      
+      if (parts.length !== 4) {
+        console.log(`Skipping line ${i}: wrong number of parts (${parts.length})`)
+        continue
+      }
       
       const [business, domains, keyAttributes, reviseQuestion] = parts
       
