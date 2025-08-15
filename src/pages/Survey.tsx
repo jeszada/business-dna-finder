@@ -117,11 +117,11 @@ const Survey = () => {
             <>
               <div className="mb-4 p-4 bg-muted/50 rounded-lg">
                 <p className="text-sm text-foreground leading-relaxed">
-                  เลือกระดับที่ตรงกับความรู้สึกของคุณที่สุด เพื่อให้ระบบวิเคราะห์ได้แม่นยำ โดย 
+                  เลือกระดับที่ตรงกับความรู้สึกของคุณที่สุด โดย 
                   <span className="font-medium"> "1" </span>
-                  คือ น้อยมาก หรือไม่ค่อยตรงกับตัวคุณ และ 
+                  คือ น้อยมาก หรือไม่ค่อยตรง และ 
                   <span className="font-medium"> "5" </span>
-                  คือ มากที่สุดหรือตรงกับตัวคุณมาก
+                  คือ มากที่สุด หรือตรงกับตัวคุณมาก
                 </p>
               </div>
               
