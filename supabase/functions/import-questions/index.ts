@@ -143,7 +143,7 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabase = createClient(supabaseUrl, serviceKey)
 
-    const { rawData } = await req.json()
+    const { rawData, isCSV = false } = await req.json()
     
     if (!rawData || typeof rawData !== 'string') {
       throw new Error('rawData must be a string containing the question data')
@@ -155,7 +155,13 @@ Deno.serve(async (req) => {
     
     let questionIndex = 0
     for (const line of lines) {
-      const parts = line.split('\t')
+      // Skip header row for CSV
+      if (isCSV && questionIndex === 0 && (line.includes('ธุรกิจ') || line.includes('Business'))) {
+        continue;
+      }
+      
+      // Split by comma for CSV, tab for TSV
+      const parts = isCSV ? line.split(',').map(p => p.trim().replace(/^"|"$/g, '')) : line.split('\t')
       if (parts.length !== 4) continue
       
       const [business, domains, keyAttributes, reviseQuestion] = parts
