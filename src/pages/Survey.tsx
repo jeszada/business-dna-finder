@@ -115,12 +115,10 @@ const Survey = () => {
             </Card>
           ) : (
             <>
-              <div className="mb-4 p-4 bg-muted/50 rounded-lg">
-                <p className="text-sm text-foreground leading-relaxed">
-                  เลือกระดับที่ตรงกับความรู้สึกของคุณที่สุด<br/>
-                  โดย <span className="font-bold">1</span> คือ น้อยมาก หรือไม่ค่อยตรง และ <span className="font-bold">5</span> คือ มากที่สุด หรือตรงกับตัวคุณมาก
-                </p>
-              </div>
+              <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                เลือกระดับที่ตรงกับความรู้สึกของคุณที่สุด<br/>
+                โดย <span className="font-bold">1</span> คือ น้อยมาก หรือไม่ค่อยตรง และ <span className="font-bold">5</span> คือ มากที่สุด หรือตรงกับตัวคุณมาก
+              </p>
               
               <Card className="shadow-elev">
                 <CardContent className="p-6">
