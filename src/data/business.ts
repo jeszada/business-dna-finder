@@ -1,3 +1,4 @@
+
 export const BUSINESS_TYPES = [
   "ธุรกิจบริการ",
   "ธุรกิจการค้า",

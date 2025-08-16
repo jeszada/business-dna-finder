@@ -1,3 +1,4 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -6,8 +7,7 @@ import SEO from "@/components/SEO";
 import { AnswerMap, computeScores, topNBusinesses } from "@/lib/scoring";
 import { BUSINESS_TYPES, Category, BusinessType } from "@/data/business";
 import { useNavigate } from "react-router-dom";
-import { fetchQuestionsFromDatabase } from "@/lib/questionService";
-import { saveAssessmentResult } from "@/lib/assessmentService";
+import { sampleQuestions } from "@/data/sampleQuestions";
 import { Crown, Medal, Award } from "lucide-react";
 
 const STORAGE_KEY = "bsa-progress";
@@ -31,22 +31,7 @@ const categoryLabels: Record<Category, string> = {
 const Results = () => {
   const navigate = useNavigate();
   const [answers] = useState<AnswerMap>(() => loadProgress());
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadQuestions = async () => {
-      try {
-        const fetchedQuestions = await fetchQuestionsFromDatabase();
-        setQuestions(fetchedQuestions);
-      } catch (error) {
-        console.error('Failed to load questions:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadQuestions();
-  }, []);
+  const questions = sampleQuestions;
 
   const data = useMemo(() => {
     if (questions.length === 0) {
@@ -65,39 +50,10 @@ const Results = () => {
   
   const top3 = useMemo(() => topNBusinesses(data.businessScores, 3), [data]);
 
-  // Save assessment result to database
-  useEffect(() => {
-    const saveResults = async () => {
-      if (Object.keys(answers).length > 0 && questions.length > 0) {
-        try {
-          await saveAssessmentResult({
-            top_business_types: top3.map(([business_type, score]) => ({ business_type, score })),
-            category_scores: data.categoryAverages,
-            all_business_scores: data.businessScores,
-            answers
-          });
-        } catch (error) {
-          console.error('Failed to save assessment result:', error);
-        }
-      }
-    };
-    saveResults();
-  }, [answers, questions, top3, data]);
-
   useEffect(() => {
     // If user lands here without answers, redirect
     if (Object.keys(answers).length === 0) navigate("/survey");
   }, [answers, navigate]);
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <p>กำลังคำนวณผลลัพธ์...</p>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <>
@@ -164,7 +120,7 @@ const Results = () => {
           </div>
 
           <footer className="mt-8 text-xs text-muted-foreground">
-            ระบบอ้างอิงจาก 336 คำถามที่ครอบคลุม 14 ประเภทธุรกิจ
+            ระบบอ้างอิงจาก 40 คำถามที่ครอบคลุม 14 ประเภทธุรกิจ
           </footer>
         </section>
       </main>

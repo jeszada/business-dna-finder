@@ -1,3 +1,4 @@
+
 import { BusinessType, Category, Question } from "@/data/business";
 
 export type AnswerMap = Record<string, number>; // questionId -> 1..5

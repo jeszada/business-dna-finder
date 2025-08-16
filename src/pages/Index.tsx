@@ -1,9 +1,9 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
-import { Sparkles, TrendingUp } from "lucide-react";
-import heroImage from "@/assets/hero-image.jpg";
+import { TrendingUp } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -30,13 +30,11 @@ const Index = () => {
       />
       <main className="min-h-screen flex items-center justify-center bg-background bg-gradient-to-br from-background via-background to-primary/5 py-8">
         <section className="w-full max-w-xl p-6 sm:p-8 -mt-16">
-          {/* Logo Image */}
+          {/* Logo Area */}
           <div className="mb-2 text-center animate-fade-in">
-            <img 
-              src={heroImage} 
-              alt="Business Assessment Logo" 
-              className="w-32 h-32 mx-auto object-cover"
-            />
+            <div className="w-32 h-32 mx-auto bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center shadow-lg">
+              <TrendingUp className="w-16 h-16 text-white" />
+            </div>
           </div>
           
           <header className="mb-8 text-center animate-fade-in">
@@ -53,7 +51,7 @@ const Index = () => {
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
             
             {/* Main card */}
-            <div className="relative rounded-xl bg-card/95 backdrop-blur-sm border border-border/50 p-6 sm:p-8 shadow-elev hover:shadow-glow transition-all duration-500">
+            <div className="relative rounded-xl bg-card/95 backdrop-blur-sm border border-border/50 p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all duration-500">
               <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-3 text-foreground">ค้นพบ DNA ทางธุรกิจของคุณ</h2>
                 <p className="text-muted-foreground leading-relaxed">
@@ -64,7 +62,7 @@ const Index = () => {
               <div className="space-y-3">
                 <Button 
                   size="lg" 
-                  className="w-full bg-gradient-primary text-primary-foreground hover:scale-105 transition-transform duration-200 font-medium" 
+                  className="w-full bg-gradient-to-r from-primary to-accent text-primary-foreground hover:scale-105 transition-transform duration-200 font-medium" 
                   onClick={() => navigate("/survey")}
                 > 
                   <TrendingUp className="mr-2 h-5 w-5" />

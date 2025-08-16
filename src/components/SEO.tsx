@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 
 interface SEOProps {
@@ -58,5 +59,4 @@ const SEO = ({ title, description, canonical, jsonLd }: SEOProps) => {
   return null;
 };
 
-// Force rebuild
 export default SEO;
