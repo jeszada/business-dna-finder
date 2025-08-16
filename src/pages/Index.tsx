@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Clock, Star, BarChart3, Upload } from "lucide-react";
+import { CheckCircle, Clock, Star, BarChart3, Upload, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEO from "@/components/SEO";
 
@@ -22,108 +22,101 @@ const Index = () => {
         title="Business Suitability Assessment | BSA"
         description="ประเมินความเหมาะสมทางธุรกิจ - ค้นหาประเภทธุรกิจที่เหมาะกับคุณผ่านแบบประเมิน 40 คำถาม"
       />
-      <main className="min-h-screen flex items-center justify-center bg-background bg-gradient-to-br from-background via-background to-primary/5 py-8">
-        <section className="w-full max-w-xl p-6 sm:p-8 -mt-16">
-          <header className="mb-8 text-center animate-fade-in">
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <p className="text-sm text-muted-foreground font-medium">Business Suitability Assessment</p>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 leading-tight">
-              ค้นหาธุรกิจ<br />
-              <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                ที่เหมาะกับคุณ
-              </span>
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-md mx-auto leading-relaxed">
-              แบบประเมินความเหมาะสมทางธุรกิจ ค้นพบศักยภาพและทิศทางธุรกิจที่ใช่สำหรับคุณ
-            </p>
-          </header>
-
-          <Card className="mb-6 border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5 animate-fade-in shadow-lg">
-            <CardHeader className="pb-4">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-xl text-primary">แบบประเมิน BSA</CardTitle>
-                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
-                  40 คำถาม
-                </Badge>
+      <main className="min-h-screen flex items-center justify-center bg-background py-8 px-4">
+        <section className="w-full max-w-md">
+          {/* Logo Section */}
+          <div className="text-center mb-8 animate-fade-in">
+            <div className="mb-6">
+              {/* Whale Logo Placeholder - using CSS to create a simple whale shape */}
+              <div className="mx-auto w-24 h-16 relative">
+                <svg viewBox="0 0 120 80" className="w-full h-full">
+                  <path
+                    d="M20 50 Q40 20, 80 35 Q100 40, 110 20 L115 25 Q100 45, 80 40 Q60 50, 50 60 L45 55 Q35 65, 20 50 Z"
+                    fill="url(#whaleGradient)"
+                    stroke="#6366f1"
+                    strokeWidth="1"
+                  />
+                  <defs>
+                    <linearGradient id="whaleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#8b5cf6" />
+                      <stop offset="100%" stopColor="#6366f1" />
+                    </linearGradient>
+                  </defs>
+                </svg>
               </div>
-              <CardDescription className="text-base">
-                ประเมินครอบคลุม 4 มิติหลัก เพื่อหา 3 อันดับธุรกิจที่เหมาะกับคุณมากที่สุด
+              <div className="text-lg font-medium text-muted-foreground mt-2">
+                ปลาเดคิง
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Pakadbeing Digital Startup
+              </div>
+            </div>
+            
+            <p className="text-sm text-muted-foreground font-medium mb-4">
+              Business Suitability Assessment
+            </p>
+            
+            <h1 className="text-2xl font-bold text-foreground mb-6 leading-tight">
+              แบบประเมินความเหมาะสม<br />
+              <span className="text-primary">ทางธุรกิจ</span>
+            </h1>
+          </div>
+
+          {/* Main Card */}
+          <Card className="mb-6 bg-background border animate-fade-in">
+            <CardHeader className="text-center pb-4">
+              <CardTitle className="text-xl font-bold mb-2">
+                ค้นพบ DNA ทางธุรกิจของคุณ
+              </CardTitle>
+              <CardDescription className="text-base leading-relaxed">
+                ผ่านแบบทดสอบ 4 หมวดหลัก เพื่อหาประเภท<br />
+                ธุรกิจที่เหมาะสมที่สุด และตัดสินใจได้อย่างมั่นใจ
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <span>ทักษะและความสามารถ</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <span>ความชอบส่วนตัว</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <span>ความพร้อมทางธุรกิจ</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <span>แรงจูงใจและเป้าหมาย</span>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-2 pt-2 text-sm text-muted-foreground">
-                <Clock className="w-4 h-4" />
-                <span>ใช้เวลาประมาณ 5-8 นาที</span>
-              </div>
-              
               <Button 
                 onClick={handleStart}
                 disabled={isStarted}
-                className="w-full py-6 text-lg font-semibold bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                className="w-full py-6 text-lg font-semibold bg-primary hover:bg-primary/90 text-white rounded-lg flex items-center justify-center gap-2"
               >
-                {isStarted ? "กำลังเริ่มต้น..." : "เริ่มประเมิน"}
+                <TrendingUp className="w-5 h-5" />
+                {isStarted ? "กำลังเริ่มต้น..." : "เริ่มประเมิน DNA ทางธุรกิจ"}
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={() => navigate('/reports')}
+                className="w-full py-3 text-base font-medium rounded-lg"
+              >
+                ดูผลลัพธ์ล่าสุด
               </Button>
             </CardContent>
           </Card>
 
+          {/* Additional Info */}
+          <div className="text-center text-sm text-muted-foreground space-y-2 animate-fade-in">
+            <div className="flex items-center justify-center gap-2">
+              <Clock className="w-4 h-4" />
+              <span>ใช้เวลาประมาณ 5-8 นาที</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <CheckCircle className="w-4 h-4" />
+              <span>40 คำถาม • 14 ประเภทธุรกิจ</span>
+            </div>
+          </div>
+
           {/* Navigation Links */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <div className="flex flex-col gap-3 mt-6">
             <Button 
-              variant="outline" 
-              onClick={() => navigate('/reports')}
-              className="flex-1 flex items-center gap-2"
-            >
-              <BarChart3 className="w-4 h-4" />
-              ดูรายงานสถิติ
-            </Button>
-            <Button 
-              variant="outline" 
+              variant="ghost" 
               onClick={() => navigate('/import')}
-              className="flex-1 flex items-center gap-2"
+              className="flex items-center justify-center gap-2 text-muted-foreground"
+              size="sm"
             >
               <Upload className="w-4 h-4" />
               นำเข้าคำถาม
             </Button>
           </div>
-
-          <div className="grid grid-cols-2 gap-4 text-center text-sm text-muted-foreground animate-fade-in">
-            <div className="flex flex-col items-center gap-1">
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                <Star className="w-4 h-4 text-primary" />
-              </div>
-              <span>14 ประเภทธุรกิจ</span>
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
-                <CheckCircle className="w-4 h-4 text-accent" />
-              </div>
-              <span>ผลลัพธ์ทันที</span>
-            </div>
-          </div>
-
-          <footer className="mt-8 text-center text-xs text-muted-foreground">
-            <p>© 2024 Business Suitability Assessment. พัฒนาเพื่อช่วยค้นหาทิศทางธุรกิจที่เหมาะสม</p>
-          </footer>
         </section>
       </main>
 
