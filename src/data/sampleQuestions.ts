@@ -1,4 +1,3 @@
-
 import { Question } from "./business";
 
 // ตัวอย่างข้อมูล 40 คำถามสำหรับการประเมิน
@@ -36,7 +35,7 @@ export const sampleQuestions: Question[] = [
     text: "คุณสนใจเรื่องสุขภาพ/ความงามเป็นพิเศษ",
     category: "motivation",
     weights: {
-      "ธุرกิจสุขภาพ/ความงาม": 1,
+      "ธุรกิจสุขภาพ/ความงาม": 1,
     },
   },
   {
