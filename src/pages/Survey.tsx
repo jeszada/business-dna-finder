@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import SEO from "@/components/SEO";
-import { sampleQuestions } from "@/data/sampleQuestions";
 import { Question } from "@/data/business";
 import { AnswerMap } from "@/lib/scoring";
+import { fetchQuestionsFromDatabase, getRandomQuestions } from "@/lib/questionService";
+import { useQuery } from "@tanstack/react-query";
 
 const STORAGE_KEY = "bsa-progress";
 
@@ -32,7 +33,18 @@ const Survey = () => {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<AnswerMap>(() => loadProgress());
   const [index, setIndex] = useState(0);
-  const questions: Question[] = sampleQuestions;
+  
+  // ดึงคำถามจากฐานข้อมูล
+  const { data: allQuestions, isLoading, error } = useQuery({
+    queryKey: ['questions'],
+    queryFn: fetchQuestionsFromDatabase,
+  });
+
+  // สุ่มคำถาม 40 ข้อจากฐานข้อมูล
+  const questions: Question[] = useMemo(() => {
+    if (!allQuestions || allQuestions.length === 0) return [];
+    return getRandomQuestions(allQuestions, 40);
+  }, [allQuestions]);
 
   const q = questions[index];
   const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
@@ -52,6 +64,48 @@ const Survey = () => {
   };
 
   const goBack = () => setIndex((i) => Math.max(0, i - 1));
+
+  // แสดงสถานะโหลด
+  if (isLoading) {
+    return (
+      <>
+        <SEO
+          title="กำลังโหลดคำถาม | BSA"
+          description="กำลังโหลดแบบประเมินความเหมาะสมทางธุรกิจ"
+        />
+        <main className="min-h-screen bg-background flex items-center justify-center">
+          <Card className="shadow-lg max-w-md">
+            <CardContent className="p-6 text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+              <p>กำลังโหลดคำถาม...</p>
+            </CardContent>
+          </Card>
+        </main>
+      </>
+    );
+  }
+
+  // แสดงข้อผิดพลาด
+  if (error) {
+    return (
+      <>
+        <SEO
+          title="เกิดข้อผิดพลาด | BSA"
+          description="ไม่สามารถโหลดคำถามได้"
+        />
+        <main className="min-h-screen bg-background flex items-center justify-center">
+          <Card className="shadow-lg max-w-md">
+            <CardContent className="p-6 text-center">
+              <p className="text-red-600 mb-4">เกิดข้อผิดพลาดในการโหลดคำถาม</p>
+              <Button onClick={() => window.location.reload()}>
+                ลองใหม่
+              </Button>
+            </CardContent>
+          </Card>
+        </main>
+      </>
+    );
+  }
 
   return (
     <>

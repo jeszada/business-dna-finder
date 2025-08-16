@@ -7,8 +7,9 @@ import SEO from "@/components/SEO";
 import { AnswerMap, computeScores, topNBusinesses } from "@/lib/scoring";
 import { BUSINESS_TYPES, Category, BusinessType } from "@/data/business";
 import { useNavigate } from "react-router-dom";
-import { sampleQuestions } from "@/data/sampleQuestions";
 import { Crown, Medal, Award } from "lucide-react";
+import { fetchQuestionsFromDatabase, getRandomQuestions } from "@/lib/questionService";
+import { useQuery } from "@tanstack/react-query";
 
 const STORAGE_KEY = "bsa-progress";
 
@@ -31,7 +32,18 @@ const categoryLabels: Record<Category, string> = {
 const Results = () => {
   const navigate = useNavigate();
   const [answers] = useState<AnswerMap>(() => loadProgress());
-  const questions = sampleQuestions;
+  
+  // ดึงคำถามจากฐานข้อมูล
+  const { data: allQuestions, isLoading } = useQuery({
+    queryKey: ['questions'],
+    queryFn: fetchQuestionsFromDatabase,
+  });
+
+  // สุ่มคำถาม 40 ข้อจากฐานข้อมูล (เหมือนกับใน Survey)
+  const questions = useMemo(() => {
+    if (!allQuestions || allQuestions.length === 0) return [];
+    return getRandomQuestions(allQuestions, 40);
+  }, [allQuestions]);
 
   const data = useMemo(() => {
     if (questions.length === 0) {
@@ -54,6 +66,25 @@ const Results = () => {
     // If user lands here without answers, redirect
     if (Object.keys(answers).length === 0) navigate("/survey");
   }, [answers, navigate]);
+
+  if (isLoading) {
+    return (
+      <>
+        <SEO
+          title="กำลังคำนวณผลลัพธ์ | BSA"
+          description="กำลังคำนวณผลการประเมินความเหมาะสมทางธุรกิจ"
+        />
+        <main className="min-h-screen bg-background flex items-center justify-center">
+          <Card className="shadow-lg max-w-md">
+            <CardContent className="p-6 text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+              <p>กำลังคำนวณผลลัพธ์...</p>
+            </CardContent>
+          </Card>
+        </main>
+      </>
+    );
+  }
 
   return (
     <>
