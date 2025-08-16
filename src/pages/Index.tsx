@@ -30,13 +30,6 @@ const Index = () => {
       />
       <main className="min-h-screen flex items-center justify-center bg-background bg-gradient-to-br from-background via-background to-primary/5 py-8">
         <section className="w-full max-w-xl p-6 sm:p-8 -mt-16">
-          {/* Logo Area */}
-          <div className="mb-2 text-center animate-fade-in">
-            <div className="w-32 h-32 mx-auto bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center shadow-lg">
-              <TrendingUp className="w-16 h-16 text-white" />
-            </div>
-          </div>
-          
           <header className="mb-8 text-center animate-fade-in">
             <div className="flex items-center justify-center gap-2 mb-3">
               <p className="text-sm text-muted-foreground font-medium">Business Suitability Assessment</p>
