@@ -21,7 +21,6 @@ const Index = () => {
       <SEO
         title="Business Suitability Assessment | BSA"
         description="ประเมินความเหมาะสมทางธุรกิจ - ค้นหาประเภทธุรกิจที่เหมาะกับคุณผ่านแบบประเมิน 40 คำถาม"
-        keywords="ประเมินธุรกิจ, แบบทดสอบธุรกิจ, ความเหมาะสมทางธุรกิจ, BSA"
       />
       <main className="min-h-screen flex items-center justify-center bg-background bg-gradient-to-br from-background via-background to-primary/5 py-8">
         <section className="w-full max-w-xl p-6 sm:p-8 -mt-16">
@@ -128,7 +127,7 @@ const Index = () => {
         </section>
       </main>
 
-      <style jsx>{`
+      <style>{`
         @keyframes fade-in {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
