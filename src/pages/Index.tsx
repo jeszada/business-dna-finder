@@ -24,34 +24,8 @@ const Index = () => {
       />
       <main className="min-h-screen flex items-center justify-center bg-background py-8 px-4">
         <section className="w-full max-w-md">
-          {/* Logo Section */}
+          {/* Header Section */}
           <div className="text-center mb-8 animate-fade-in">
-            <div className="mb-6">
-              {/* Whale Logo Placeholder - using CSS to create a simple whale shape */}
-              <div className="mx-auto w-24 h-16 relative">
-                <svg viewBox="0 0 120 80" className="w-full h-full">
-                  <path
-                    d="M20 50 Q40 20, 80 35 Q100 40, 110 20 L115 25 Q100 45, 80 40 Q60 50, 50 60 L45 55 Q35 65, 20 50 Z"
-                    fill="url(#whaleGradient)"
-                    stroke="#6366f1"
-                    strokeWidth="1"
-                  />
-                  <defs>
-                    <linearGradient id="whaleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#8b5cf6" />
-                      <stop offset="100%" stopColor="#6366f1" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
-              <div className="text-lg font-medium text-muted-foreground mt-2">
-                ปลาเดคิง
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Pakadbeing Digital Startup
-              </div>
-            </div>
-            
             <p className="text-sm text-muted-foreground font-medium mb-4">
               Business Suitability Assessment
             </p>
