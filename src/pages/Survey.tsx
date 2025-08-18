@@ -11,6 +11,7 @@ import { fetchQuestionsFromDatabase, getRandomQuestions } from "@/lib/questionSe
 import { useQuery } from "@tanstack/react-query";
 
 const STORAGE_KEY = "bsa-progress";
+const QUESTIONS_KEY = "bsa-questions";
 
 function loadProgress(): AnswerMap {
   try {
@@ -27,6 +28,21 @@ function saveProgress(data: AnswerMap) {
   } catch {}
 }
 
+function loadStoredQuestions(): string[] {
+  try {
+    const raw = localStorage.getItem(QUESTIONS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveStoredQuestions(questionIds: string[]) {
+  try {
+    localStorage.setItem(QUESTIONS_KEY, JSON.stringify(questionIds));
+  } catch {}
+}
+
 const labels = ["ต่ำมาก", "ต่ำ", "ปานกลาง", "สูง", "สูงมาก"];
 
 const Survey = () => {
@@ -40,10 +56,30 @@ const Survey = () => {
     queryFn: fetchQuestionsFromDatabase,
   });
 
-  // สุ่มคำถาม 40 ข้อจากฐานข้อมูล
+  // สุ่มคำถาม 40 ข้อจากฐานข้อมูล และเก็บ IDs ไว้
   const questions: Question[] = useMemo(() => {
     if (!allQuestions || allQuestions.length === 0) return [];
-    return getRandomQuestions(allQuestions, 40);
+    
+    // ตรวจสอบว่ามีคำถามที่เก็บไว้แล้วหรือไม่
+    const storedQuestionIds = loadStoredQuestions();
+    
+    if (storedQuestionIds.length > 0) {
+      // ใช้คำถามที่เก็บไว้
+      const storedQuestions = storedQuestionIds
+        .map(id => allQuestions.find(q => q.id === id))
+        .filter(q => q !== undefined) as Question[];
+      
+      if (storedQuestions.length > 0) {
+        return storedQuestions;
+      }
+    }
+    
+    // สุ่มคำถามใหม่และเก็บ IDs ไว้
+    const randomQuestions = getRandomQuestions(allQuestions, 40);
+    const questionIds = randomQuestions.map(q => q.id);
+    saveStoredQuestions(questionIds);
+    
+    return randomQuestions;
   }, [allQuestions]);
 
   const q = questions[index];

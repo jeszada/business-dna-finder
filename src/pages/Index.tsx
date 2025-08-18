@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import SEO from "@/components/SEO";
 
 const STORAGE_KEY = "bsa-progress";
+const QUESTIONS_KEY = "bsa-questions";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -29,12 +30,15 @@ const Index = () => {
     // เคลียร์ข้อมูลเก่าก่อนเริ่มใหม่
     try {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(QUESTIONS_KEY); // เคลียร์ question IDs ด้วย
     } catch (error) {
-      console.log("Could not clear localStorage:", error);
+      console.log('Error clearing localStorage:', error);
     }
     
     setIsStarted(true);
-    setTimeout(() => navigate("/survey"), 300);
+    setTimeout(() => {
+      navigate("/survey");
+    }, 1000);
   };
 
   const handleViewLatestResults = () => {

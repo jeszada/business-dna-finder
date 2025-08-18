@@ -5,13 +5,14 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
 import { AnswerMap, computeScores, topNBusinesses } from "@/lib/scoring";
-import { BUSINESS_TYPES, Category, BusinessType } from "@/data/business";
+import { BUSINESS_TYPES, Category, BusinessType, Question } from "@/data/business";
 import { useNavigate } from "react-router-dom";
 import { Crown, Medal, Award } from "lucide-react";
-import { fetchQuestionsFromDatabase, getRandomQuestions } from "@/lib/questionService";
+import { fetchQuestionsFromDatabase } from "@/lib/questionService";
 import { useQuery } from "@tanstack/react-query";
 
 const STORAGE_KEY = "bsa-progress";
+const QUESTIONS_KEY = "bsa-questions";
 
 function loadProgress(): AnswerMap {
   try {
@@ -19,6 +20,15 @@ function loadProgress(): AnswerMap {
     return raw ? (JSON.parse(raw) as AnswerMap) : {};
   } catch {
     return {};
+  }
+}
+
+function loadStoredQuestions(): string[] {
+  try {
+    const raw = localStorage.getItem(QUESTIONS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
   }
 }
 
@@ -39,10 +49,19 @@ const Results = () => {
     queryFn: fetchQuestionsFromDatabase,
   });
 
-  // สุ่มคำถาม 40 ข้อจากฐานข้อมูล (เหมือนกับใน Survey)
-  const questions = useMemo(() => {
+  // ใช้คำถามชุดเดียวกันกับที่ทำแบบทดสอบ
+  const questions: Question[] = useMemo(() => {
     if (!allQuestions || allQuestions.length === 0) return [];
-    return getRandomQuestions(allQuestions, 40);
+    
+    const storedQuestionIds = loadStoredQuestions();
+    if (storedQuestionIds.length === 0) return [];
+    
+    // ใช้คำถามที่เก็บไว้ตาม ID
+    const storedQuestions = storedQuestionIds
+      .map(id => allQuestions.find(q => q.id === id))
+      .filter(q => q !== undefined) as Question[];
+    
+    return storedQuestions;
   }, [allQuestions]);
 
   const data = useMemo(() => {
