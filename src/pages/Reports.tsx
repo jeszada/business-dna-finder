@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -142,9 +141,6 @@ const Reports = () => {
                             ) : (
                               <span className="text-sm font-bold text-muted-foreground">{rank}</span>
                             )}
-                          </div>
-                          <div className="text-lg font-bold text-muted-foreground">
-                            #{rank}
                           </div>
                         </div>
                         <div className="text-right">
