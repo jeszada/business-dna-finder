@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { BarChart3, Users, TrendingUp, Crown, Medal, Award } from 'lucide-react';
@@ -36,10 +35,19 @@ const Reports = () => {
 
   const getRankStyle = (rank: number) => {
     switch (rank) {
-      case 1: return "bg-gradient-to-r from-primary/20 to-primary/10 border-primary/30 text-primary font-semibold";
-      case 2: return "bg-gradient-to-r from-primary/15 to-primary/8 border-primary/25 text-primary/90 font-medium";
-      case 3: return "bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20 text-primary/80 font-medium";
-      default: return "hover:bg-muted/50";
+      case 1: return "bg-gradient-to-br from-primary/20 to-primary/10 border-primary/40 shadow-lg";
+      case 2: return "bg-gradient-to-br from-primary/15 to-primary/8 border-primary/30 shadow-md";
+      case 3: return "bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 shadow-sm";
+      default: return "bg-card hover:bg-muted/50 transition-colors";
+    }
+  };
+
+  const getRankTextStyle = (rank: number) => {
+    switch (rank) {
+      case 1: return "text-primary font-bold";
+      case 2: return "text-primary/90 font-semibold";
+      case 3: return "text-primary/80 font-medium";
+      default: return "text-foreground";
     }
   };
 
@@ -111,58 +119,64 @@ const Reports = () => {
             </Card>
           </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>อันดับธุรกิจที่ได้รับความนิยม</CardTitle>
-              <CardDescription>
-                เรียงตามจำนวนผู้เลือกธุรกิจแต่ละประเภท
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-16">อันดับ</TableHead>
-                    <TableHead>ประเภทธุรกิจ</TableHead>
-                    <TableHead className="text-right">จำนวนคน</TableHead>
-                    <TableHead className="text-right">เปอร์เซ็นต์</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {businessStatsWithPercentage.map((item, index) => {
-                    const rank = index + 1;
-                    const IconComponent = getRankIcon(rank);
-                    
-                    return (
-                      <TableRow 
-                        key={item.businessType} 
-                        className={getRankStyle(rank)}
-                      >
-                        <TableCell className="font-medium">
-                          <div className="flex items-center gap-2">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold mb-4">อันดับธุรกิจที่ได้รับความนิยม</h2>
+            <p className="text-muted-foreground mb-6">เรียงตามจำนวนผู้เลือกธุรกิจแต่ละประเภท</p>
+            
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {businessStatsWithPercentage.map((item, index) => {
+                const rank = index + 1;
+                const IconComponent = getRankIcon(rank);
+                
+                return (
+                  <Card 
+                    key={item.businessType} 
+                    className={`${getRankStyle(rank)} transition-all duration-200 hover:scale-105`}
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className={`flex items-center justify-center w-8 h-8 rounded-full ${rank <= 3 ? 'bg-primary/10' : 'bg-muted'}`}>
                             {IconComponent ? (
-                              <IconComponent className="h-4 w-4" />
+                              <IconComponent className={`h-4 w-4 ${rank <= 3 ? 'text-primary' : 'text-muted-foreground'}`} />
                             ) : (
-                              <span className="w-4 text-center">{rank}</span>
+                              <span className="text-sm font-bold text-muted-foreground">{rank}</span>
                             )}
                           </div>
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {item.businessType}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {item.count.toLocaleString()}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {item.percentage}%
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                          <div className="text-lg font-bold text-muted-foreground">
+                            #{rank}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-primary">
+                            {item.percentage}%
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <h3 className={`text-lg font-semibold mb-2 ${getRankTextStyle(rank)}`}>
+                        {item.businessType}
+                      </h3>
+                      
+                      <div className="flex items-center justify-between text-sm text-muted-foreground">
+                        <span>จำนวนคน</span>
+                        <span className="font-semibold">{item.count.toLocaleString()}</span>
+                      </div>
+                      
+                      <div className="mt-3">
+                        <div className="w-full bg-muted rounded-full h-2">
+                          <div 
+                            className="bg-primary h-2 rounded-full transition-all duration-500" 
+                            style={{ width: `${item.percentage}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
 
           <Card className="mt-6">
             <CardHeader>
