@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -173,21 +174,6 @@ const Reports = () => {
               })}
             </div>
           </div>
-
-          <Card className="mt-6">
-            <CardHeader>
-              <CardTitle>หมายเหตุ</CardTitle>
-              <CardDescription>
-                ข้อมูลนี้เป็นตัวอย่างสำหรับการแสดงผล ในอนาคตจะเชื่อมต่อกับข้อมูลจริงจากฐานข้อมูล
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm">
-                อันดับ 1-3 จะแสดงด้วยไอคอนพิเศษและสีไล่เฉดเพื่อให้เห็นความโดดเด่น
-                ข้อมูลจะอัปเดตตามการใช้งานจริงของระบบ
-              </p>
-            </CardContent>
-          </Card>
         </div>
       </main>
     </>
