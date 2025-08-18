@@ -11,7 +11,6 @@ import { Crown, Medal, Award } from "lucide-react";
 import { fetchQuestionsFromDatabase } from "@/lib/questionService";
 import { saveAssessmentResult, AssessmentResult } from "@/lib/assessmentService";
 import { useQuery } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
 
 const STORAGE_KEY = "bsa-progress";
 const QUESTIONS_KEY = "bsa-questions";
@@ -86,7 +85,6 @@ const categoryLabels: Record<Category, string> = {
 
 const Results = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [answers] = useState<AnswerMap>(() => loadProgress());
   const [isSaving, setIsSaving] = useState(false);
   const [saveAttempted, setSaveAttempted] = useState(false);
@@ -191,17 +189,8 @@ const Results = () => {
           markResultAsSaved();
           
           console.log('Assessment result saved successfully');
-          toast({
-            title: "บันทึกสำเร็จ",
-            description: "ผลการประเมินได้ถูกบันทึกลงฐานข้อมูลแล้ว",
-          });
         } catch (error) {
           console.error('Failed to save assessment result:', error);
-          toast({
-            title: "เกิดข้อผิดพลาด",
-            description: "ไม่สามารถบันทึกผลการประเมินได้",
-            variant: "destructive",
-          });
         } finally {
           setIsSaving(false);
         }
@@ -209,7 +198,7 @@ const Results = () => {
     };
 
     saveResults();
-  }, [questions, answers, data, top3, isSaving, saveAttempted, toast]);
+  }, [questions, answers, data, top3, isSaving, saveAttempted]);
 
   useEffect(() => {
     // If user lands here without answers, redirect
@@ -262,10 +251,7 @@ const Results = () => {
       <main className="min-h-screen bg-background">
         <section className="max-w-xl mx-auto p-4 sm:p-6">
           <header className="rounded-md bg-secondary p-4 sm:p-5 mb-4">
-            <h1 className="text-lg font-semibold">
-              การประเมินเสร็จสิ้น
-              {isSaving && <span className="ml-2 text-sm text-muted-foreground">(กำลังบันทึก...)</span>}
-            </h1>
+            <h1 className="text-lg font-semibold">การประเมินเสร็จสิ้น</h1>
             <p className="text-sm text-muted-foreground">คุณได้ตอบครบ {Object.keys(answers).length} ข้อ</p>
           </header>
 
@@ -322,11 +308,6 @@ const Results = () => {
 
           <footer className="mt-8 text-xs text-muted-foreground">
             ระบบอ้างอิงจาก 40 คำถามที่ครอบคลุม 14 ประเภทธุรกิจ
-            {saveAttempted && (
-              <span className="block mt-1">
-                {isSaving ? "กำลังบันทึกข้อมูล..." : "ข้อมูลถูกบันทึกแล้ว"}
-              </span>
-            )}
           </footer>
         </section>
       </main>
