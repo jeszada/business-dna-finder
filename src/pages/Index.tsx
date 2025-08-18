@@ -114,12 +114,12 @@ const Index = () => {
           <div className="flex flex-col gap-3 mt-6">
             <Button 
               variant="ghost" 
-              onClick={() => navigate('/import')}
+              onClick={() => navigate('/reports')}
               className="flex items-center justify-center gap-2 text-muted-foreground"
               size="sm"
             >
-              <Upload className="w-4 h-4" />
-              นำเข้าคำถาม
+              <BarChart3 className="w-4 h-4" />
+              ดูรายงานสถิติ
             </Button>
           </div>
         </section>
