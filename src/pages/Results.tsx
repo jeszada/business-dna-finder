@@ -1,5 +1,4 @@
 
-
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -22,7 +21,9 @@ const SAVED_KEY = "bsa-result-saved";
 function loadProgress(): AnswerMap {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as AnswerMap) : {};
+    const data = raw ? (JSON.parse(raw) as AnswerMap) : {};
+    console.log('Loaded progress:', Object.keys(data).length, 'answers');
+    return data;
   } catch {
     return {};
   }
@@ -31,7 +32,9 @@ function loadProgress(): AnswerMap {
 function loadStoredQuestions(): string[] {
   try {
     const raw = localStorage.getItem(QUESTIONS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const data = raw ? JSON.parse(raw) : [];
+    console.log('Loaded stored questions:', data.length);
+    return data;
   } catch {
     return [];
   }
@@ -43,16 +46,23 @@ function getOrCreateSessionId(): string {
     if (!sessionId) {
       sessionId = crypto.randomUUID();
       localStorage.setItem(SESSION_KEY, sessionId);
+      console.log('Created new session ID:', sessionId);
+    } else {
+      console.log('Using existing session ID:', sessionId);
     }
     return sessionId;
   } catch {
-    return crypto.randomUUID();
+    const sessionId = crypto.randomUUID();
+    console.log('Fallback session ID:', sessionId);
+    return sessionId;
   }
 }
 
 function isResultSaved(): boolean {
   try {
-    return localStorage.getItem(SAVED_KEY) === 'true';
+    const saved = localStorage.getItem(SAVED_KEY) === 'true';
+    console.log('Result saved status:', saved);
+    return saved;
   } catch {
     return false;
   }
@@ -61,8 +71,9 @@ function isResultSaved(): boolean {
 function markResultAsSaved(): void {
   try {
     localStorage.setItem(SAVED_KEY, 'true');
+    console.log('Marked result as saved');
   } catch (error) {
-    console.log('Error marking result as saved:', error);
+    console.error('Error marking result as saved:', error);
   }
 }
 
@@ -78,6 +89,7 @@ const Results = () => {
   const { toast } = useToast();
   const [answers] = useState<AnswerMap>(() => loadProgress());
   const [isSaving, setIsSaving] = useState(false);
+  const [saveAttempted, setSaveAttempted] = useState(false);
   
   // ดึงคำถามจากฐานข้อมูล
   const { data: allQuestions, isLoading } = useQuery({
@@ -97,6 +109,7 @@ const Results = () => {
       .map(id => allQuestions.find(q => q.id === id))
       .filter(q => q !== undefined) as Question[];
     
+    console.log('Questions for scoring:', storedQuestions.length);
     return storedQuestions;
   }, [allQuestions]);
 
@@ -112,22 +125,50 @@ const Results = () => {
       });
       return { businessScores: emptyBusinessScores, categoryAverages: emptyCategoryAverages };
     }
+    
+    console.log('Computing scores with', questions.length, 'questions and', Object.keys(answers).length, 'answers');
     return computeScores(questions, answers);
   }, [questions, answers]);
   
-  const top3 = useMemo(() => topNBusinesses(data.businessScores, 3), [data]);
+  const top3 = useMemo(() => {
+    const result = topNBusinesses(data.businessScores, 3);
+    console.log('Top 3 businesses:', result);
+    return result;
+  }, [data]);
 
   // บันทึกผลการประเมินเมื่อมีข้อมูลครบ (เพียงครั้งเดียว)
   useEffect(() => {
     const saveResults = async () => {
+      // ตรวจสอบเงื่อนไขก่อนบันทึก
+      const hasQuestions = questions.length > 0;
+      const hasAnswers = Object.keys(answers).length > 0;
+      const hasTop3 = top3.length > 0;
+      const notAlreadySaved = !isResultSaved();
+      const notCurrentlySaving = !isSaving;
+      const notAlreadyAttempted = !saveAttempted;
+
+      console.log('Save conditions:', {
+        hasQuestions,
+        hasAnswers,
+        hasTop3,
+        notAlreadySaved,
+        notCurrentlySaving,
+        notAlreadyAttempted,
+        answersCount: Object.keys(answers).length,
+        questionsCount: questions.length
+      });
+
       if (
-        questions.length > 0 && 
-        Object.keys(answers).length > 0 && 
-        !isSaving &&
-        top3.length > 0 &&
-        !isResultSaved() // ตรวจสอบว่าบันทึกแล้วหรือยัง
+        hasQuestions && 
+        hasAnswers && 
+        hasTop3 &&
+        notAlreadySaved &&
+        notCurrentlySaving &&
+        notAlreadyAttempted
       ) {
+        setSaveAttempted(true);
         setIsSaving(true);
+        
         try {
           const sessionId = getOrCreateSessionId();
           
@@ -139,9 +180,21 @@ const Results = () => {
             answers: answers
           };
 
+          console.log('Saving assessment result:', {
+            sessionId,
+            answersCount: Object.keys(answers).length,
+            top3Count: top3.length,
+            categoryScoresCount: Object.keys(data.categoryAverages).length
+          });
+
           await saveAssessmentResult(assessmentResult);
-          markResultAsSaved(); // ทำเครื่องหมายว่าบันทึกแล้ว
+          markResultAsSaved();
+          
           console.log('Assessment result saved successfully');
+          toast({
+            title: "บันทึกสำเร็จ",
+            description: "ผลการประเมินได้ถูกบันทึกลงฐานข้อมูลแล้ว",
+          });
         } catch (error) {
           console.error('Failed to save assessment result:', error);
           toast({
@@ -156,11 +209,14 @@ const Results = () => {
     };
 
     saveResults();
-  }, [questions, answers, data, top3, isSaving, toast]);
+  }, [questions, answers, data, top3, isSaving, saveAttempted, toast]);
 
   useEffect(() => {
     // If user lands here without answers, redirect
-    if (Object.keys(answers).length === 0) navigate("/survey");
+    if (Object.keys(answers).length === 0) {
+      console.log('No answers found, redirecting to survey');
+      navigate("/survey");
+    }
   }, [answers, navigate]);
 
   const handleStartNewSurvey = () => {
@@ -169,9 +225,10 @@ const Results = () => {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(QUESTIONS_KEY);
       localStorage.removeItem(SESSION_KEY);
-      localStorage.removeItem(SAVED_KEY); // เคลียร์สถานะการบันทึกด้วย
+      localStorage.removeItem(SAVED_KEY);
+      console.log('All localStorage data cleared for new survey');
     } catch (error) {
-      console.log('Error clearing localStorage:', error);
+      console.error('Error clearing localStorage:', error);
     }
     
     navigate("/survey");
@@ -265,6 +322,11 @@ const Results = () => {
 
           <footer className="mt-8 text-xs text-muted-foreground">
             ระบบอ้างอิงจาก 40 คำถามที่ครอบคลุม 14 ประเภทธุรกิจ
+            {saveAttempted && (
+              <span className="block mt-1">
+                {isSaving ? "กำลังบันทึกข้อมูล..." : "ข้อมูลถูกบันทึกแล้ว"}
+              </span>
+            )}
           </footer>
         </section>
       </main>

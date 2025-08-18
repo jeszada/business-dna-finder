@@ -12,6 +12,8 @@ import { useQuery } from "@tanstack/react-query";
 
 const STORAGE_KEY = "bsa-progress";
 const QUESTIONS_KEY = "bsa-questions";
+const SESSION_KEY = "bsa-session-id";
+const SAVED_KEY = "bsa-result-saved";
 
 function loadProgress(): AnswerMap {
   try {
@@ -25,7 +27,10 @@ function loadProgress(): AnswerMap {
 function saveProgress(data: AnswerMap) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch {}
+    console.log('Progress saved:', Object.keys(data).length, 'answers');
+  } catch (error) {
+    console.error('Failed to save progress:', error);
+  }
 }
 
 function loadStoredQuestions(): string[] {
@@ -40,7 +45,37 @@ function loadStoredQuestions(): string[] {
 function saveStoredQuestions(questionIds: string[]) {
   try {
     localStorage.setItem(QUESTIONS_KEY, JSON.stringify(questionIds));
-  } catch {}
+    console.log('Stored question IDs:', questionIds.length);
+  } catch (error) {
+    console.error('Failed to save question IDs:', error);
+  }
+}
+
+function getOrCreateSessionId(): string {
+  try {
+    let sessionId = localStorage.getItem(SESSION_KEY);
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      localStorage.setItem(SESSION_KEY, sessionId);
+      console.log('Created new session ID:', sessionId);
+    } else {
+      console.log('Using existing session ID:', sessionId);
+    }
+    return sessionId;
+  } catch {
+    const sessionId = crypto.randomUUID();
+    console.log('Fallback session ID:', sessionId);
+    return sessionId;
+  }
+}
+
+function clearSavedFlag() {
+  try {
+    localStorage.removeItem(SAVED_KEY);
+    console.log('Cleared saved flag');
+  } catch (error) {
+    console.error('Failed to clear saved flag:', error);
+  }
 }
 
 const labels = ["ต่ำมาก", "ต่ำ", "ปานกลาง", "สูง", "สูงมาก"];
@@ -49,6 +84,12 @@ const Survey = () => {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<AnswerMap>(() => loadProgress());
   const [index, setIndex] = useState(0);
+  
+  // สร้าง session ID เมื่อเริ่มต้น
+  useEffect(() => {
+    getOrCreateSessionId();
+    clearSavedFlag(); // เคลียร์ flag การบันทึกเมื่อเริ่มต้นใหม่
+  }, []);
   
   // ดึงคำถามจากฐานข้อมูล
   const { data: allQuestions, isLoading, error } = useQuery({
@@ -70,6 +111,7 @@ const Survey = () => {
         .filter(q => q !== undefined) as Question[];
       
       if (storedQuestions.length > 0) {
+        console.log('Using stored questions:', storedQuestions.length);
         return storedQuestions;
       }
     }
@@ -78,6 +120,7 @@ const Survey = () => {
     const randomQuestions = getRandomQuestions(allQuestions, 40);
     const questionIds = randomQuestions.map(q => q.id);
     saveStoredQuestions(questionIds);
+    console.log('Generated new random questions:', randomQuestions.length);
     
     return randomQuestions;
   }, [allQuestions]);
@@ -91,12 +134,17 @@ const Survey = () => {
   }, [answers]);
 
   const choose = (score: number) => {
+    console.log('Answer selected:', q.id, '=', score);
     setAnswers((prev) => ({ ...prev, [q.id]: score }));
   };
 
   const goNext = () => {
-    if (index < questions.length - 1) setIndex((i) => i + 1);
-    else navigate("/results");
+    if (index < questions.length - 1) {
+      setIndex((i) => i + 1);
+    } else {
+      console.log('Survey completed, navigating to results with', Object.keys(answers).length, 'answers');
+      navigate("/results");
+    }
   };
 
   const goBack = () => setIndex((i) => Math.max(0, i - 1));
