@@ -90,7 +90,19 @@ const Reports = () => {
   }
 
   const totalAssessments = statistics?.totalAssessments || 0;
-  const businessStats = statistics?.businessTypeStats || [];
+  const allBusinessStats = statistics?.businessTypeStats || [];
+  
+  // Filter out business types with 0 count and sort by count (desc) then alphabetically
+  const businessStats = allBusinessStats
+    .filter(item => item.count > 0)
+    .sort((a, b) => {
+      // Primary sort: by count (descending)
+      if (b.count !== a.count) {
+        return b.count - a.count;
+      }
+      // Secondary sort: alphabetically (ascending) when counts are equal
+      return a.businessType.localeCompare(b.businessType, 'th');
+    });
 
   return (
     <>
