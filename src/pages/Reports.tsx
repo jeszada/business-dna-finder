@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,15 +11,13 @@ import { BUSINESS_TYPES } from '@/data/business';
 const Reports = () => {
   const navigate = useNavigate();
 
-  // Mock data for demonstration - replace with real data from database later
   const businessStats = BUSINESS_TYPES.map((business, index) => ({
     businessType: business,
-    count: Math.floor(Math.random() * 200) + 50, // Random numbers for demo
-  })).sort((a, b) => b.count - a.count); // Sort by count descending
+    count: Math.floor(Math.random() * 200) + 50,
+  })).sort((a, b) => b.count - a.count);
 
   const totalAssessments = businessStats.reduce((sum, item) => sum + item.count, 0);
   
-  // Calculate percentages
   const businessStatsWithPercentage = businessStats.map((item) => ({
     ...item,
     percentage: Math.round((item.count / totalAssessments) * 100)
@@ -72,8 +71,8 @@ const Reports = () => {
             <p className="text-muted-foreground">สถิติการใช้งานแบบประเมินธุรกิจ</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <Card>
+          <div className="mb-8">
+            <Card className="max-w-sm">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   จำนวนผู้ทำแบบประเมิน
@@ -84,36 +83,6 @@ const Reports = () => {
                 <div className="text-2xl font-bold">{totalAssessments.toLocaleString()}</div>
                 <p className="text-xs text-muted-foreground">
                   +20.1% จากเดือนที่แล้ว
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  ธุรกิจยอดนิยม
-                </CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{businessStatsWithPercentage[0]?.businessType}</div>
-                <p className="text-xs text-muted-foreground">
-                  {businessStatsWithPercentage[0]?.percentage}% ของผู้ทำแบบประเมิน
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  คะแนนเฉลี่ย
-                </CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">78%</div>
-                <p className="text-xs text-muted-foreground">
-                  คะแนนความเหมาะสม
                 </p>
               </CardContent>
             </Card>
@@ -181,3 +150,4 @@ const Reports = () => {
 };
 
 export default Reports;
+
