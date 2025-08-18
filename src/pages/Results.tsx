@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -307,7 +306,7 @@ const Results = () => {
           </div>
 
           <footer className="mt-8 text-xs text-muted-foreground">
-            ระบบอ้างอิงจาก 40 คำถามที่ครอบคลุม 14 ประเภทธุรกิจ
+            ระบบอ้างอิงจาก 336 คำถามที่ครอบคลุม 14 ประเภทธุรกิจ
           </footer>
         </section>
       </main>
