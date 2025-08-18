@@ -7,13 +7,41 @@ import { CheckCircle, Clock, Star, BarChart3, Upload, TrendingUp } from "lucide-
 import { useNavigate } from "react-router-dom";
 import SEO from "@/components/SEO";
 
+const STORAGE_KEY = "bsa-progress";
+
 const Index = () => {
   const navigate = useNavigate();
   const [isStarted, setIsStarted] = useState(false);
 
   const handleStart = () => {
+    // เคลียร์ข้อมูลเก่าก่อนเริ่มใหม่
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      console.log("Could not clear localStorage:", error);
+    }
+    
     setIsStarted(true);
     setTimeout(() => navigate("/survey"), 300);
+  };
+
+  const handleViewLatestResults = () => {
+    // ตรวจสอบว่ามีข้อมูลใน localStorage หรือไม่
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const answers = raw ? JSON.parse(raw) : {};
+      
+      if (Object.keys(answers).length > 0) {
+        // มีข้อมูล ไปหน้า results
+        navigate("/results");
+      } else {
+        // ไม่มีข้อมูล ไปหน้า survey
+        navigate("/survey");
+      }
+    } catch (error) {
+      // มีปัญหากับ localStorage ไปหน้า survey
+      navigate("/survey");
+    }
   };
 
   return (
@@ -59,7 +87,7 @@ const Index = () => {
               
               <Button 
                 variant="outline" 
-                onClick={() => navigate('/reports')}
+                onClick={handleViewLatestResults}
                 className="w-full py-3 text-base font-medium rounded-lg"
               >
                 ดูผลลัพธ์ล่าสุด
