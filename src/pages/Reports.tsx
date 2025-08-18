@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -92,9 +91,8 @@ const Reports = () => {
   const totalAssessments = statistics?.totalAssessments || 0;
   const allBusinessStats = statistics?.businessTypeStats || [];
   
-  // Filter out business types with 0 count and sort by count (desc) then alphabetically
+  // Sort by count (desc) then alphabetically - show all including 0 count
   const businessStats = allBusinessStats
-    .filter(item => item.count > 0)
     .sort((a, b) => {
       // Primary sort: by count (descending)
       if (b.count !== a.count) {
@@ -168,11 +166,11 @@ const Reports = () => {
                           return (
                             <TableRow 
                               key={item.businessType}
-                              className={rank <= 3 ? "bg-primary/5" : ""}
+                              className={rank <= 3 && item.count > 0 ? "bg-primary/5" : ""}
                             >
                               <TableCell className="text-center">
                                 <div className="flex items-center justify-center">
-                                  {IconComponent ? (
+                                  {IconComponent && item.count > 0 ? (
                                     <IconComponent className={`h-5 w-5 ${getRankTextStyle(rank)}`} />
                                   ) : (
                                     <span className="text-sm font-bold text-muted-foreground">{rank}</span>
@@ -180,7 +178,7 @@ const Reports = () => {
                                 </div>
                               </TableCell>
                               <TableCell>
-                                <span className={`font-medium ${getRankTextStyle(rank)}`}>
+                                <span className={`font-medium ${item.count > 0 && rank <= 3 ? getRankTextStyle(rank) : 'text-foreground'}`}>
                                   {item.businessType}
                                 </span>
                               </TableCell>
@@ -188,7 +186,7 @@ const Reports = () => {
                                 {item.count.toLocaleString()}
                               </TableCell>
                               <TableCell className="text-center">
-                                <span className="text-primary font-bold">
+                                <span className={item.count > 0 ? "text-primary font-bold" : "text-muted-foreground"}>
                                   {item.percentage}%
                                 </span>
                               </TableCell>
