@@ -1,4 +1,5 @@
 
+
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -16,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 const STORAGE_KEY = "bsa-progress";
 const QUESTIONS_KEY = "bsa-questions";
 const SESSION_KEY = "bsa-session-id";
+const SAVED_KEY = "bsa-result-saved";
 
 function loadProgress(): AnswerMap {
   try {
@@ -45,6 +47,22 @@ function getOrCreateSessionId(): string {
     return sessionId;
   } catch {
     return crypto.randomUUID();
+  }
+}
+
+function isResultSaved(): boolean {
+  try {
+    return localStorage.getItem(SAVED_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+function markResultAsSaved(): void {
+  try {
+    localStorage.setItem(SAVED_KEY, 'true');
+  } catch (error) {
+    console.log('Error marking result as saved:', error);
   }
 }
 
@@ -99,14 +117,15 @@ const Results = () => {
   
   const top3 = useMemo(() => topNBusinesses(data.businessScores, 3), [data]);
 
-  // บันทึกผลการประเมินเมื่อมีข้อมูลครบ
+  // บันทึกผลการประเมินเมื่อมีข้อมูลครบ (เพียงครั้งเดียว)
   useEffect(() => {
     const saveResults = async () => {
       if (
         questions.length > 0 && 
         Object.keys(answers).length > 0 && 
         !isSaving &&
-        top3.length > 0
+        top3.length > 0 &&
+        !isResultSaved() // ตรวจสอบว่าบันทึกแล้วหรือยัง
       ) {
         setIsSaving(true);
         try {
@@ -121,6 +140,7 @@ const Results = () => {
           };
 
           await saveAssessmentResult(assessmentResult);
+          markResultAsSaved(); // ทำเครื่องหมายว่าบันทึกแล้ว
           console.log('Assessment result saved successfully');
         } catch (error) {
           console.error('Failed to save assessment result:', error);
@@ -149,6 +169,7 @@ const Results = () => {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(QUESTIONS_KEY);
       localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(SAVED_KEY); // เคลียร์สถานะการบันทึกด้วย
     } catch (error) {
       console.log('Error clearing localStorage:', error);
     }

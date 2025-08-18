@@ -13,6 +13,24 @@ export interface AssessmentResult {
 
 export async function saveAssessmentResult(result: Omit<AssessmentResult, 'id' | 'created_at'>): Promise<void> {
   try {
+    // ตรวจสอบว่ามีการบันทึกของ session นี้แล้วหรือยัง
+    const { data: existingResult, error: checkError } = await supabase
+      .from('assessment_results')
+      .select('id')
+      .eq('session_id', result.session_id)
+      .maybeSingle();
+
+    if (checkError && checkError.code !== 'PGRST116') {
+      console.error('Error checking existing result:', checkError);
+      throw checkError;
+    }
+
+    // ถ้ามีข้อมูลแล้ว ไม่ต้องบันทึกซ้ำ
+    if (existingResult) {
+      console.log('Assessment result already exists for this session, skipping save');
+      return;
+    }
+
     const { error } = await supabase
       .from('assessment_results')
       .insert([result]);
@@ -21,6 +39,8 @@ export async function saveAssessmentResult(result: Omit<AssessmentResult, 'id' |
       console.error('Error saving assessment result:', error);
       throw error;
     }
+
+    console.log('Assessment result saved successfully for session:', result.session_id);
   } catch (error) {
     console.error('Failed to save assessment result:', error);
     throw error;
