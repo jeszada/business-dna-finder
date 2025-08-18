@@ -1,3 +1,4 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -8,10 +9,13 @@ import { BUSINESS_TYPES, Category, BusinessType, Question } from "@/data/busines
 import { useNavigate } from "react-router-dom";
 import { Crown, Medal, Award } from "lucide-react";
 import { fetchQuestionsFromDatabase } from "@/lib/questionService";
+import { saveAssessmentResult, AssessmentResult } from "@/lib/assessmentService";
 import { useQuery } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 
 const STORAGE_KEY = "bsa-progress";
 const QUESTIONS_KEY = "bsa-questions";
+const SESSION_KEY = "bsa-session-id";
 
 function loadProgress(): AnswerMap {
   try {
@@ -31,6 +35,19 @@ function loadStoredQuestions(): string[] {
   }
 }
 
+function getOrCreateSessionId(): string {
+  try {
+    let sessionId = localStorage.getItem(SESSION_KEY);
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      localStorage.setItem(SESSION_KEY, sessionId);
+    }
+    return sessionId;
+  } catch {
+    return crypto.randomUUID();
+  }
+}
+
 const categoryLabels: Record<Category, string> = {
   skills: "ทักษะ",
   preferences: "ความชอบ",
@@ -40,7 +57,9 @@ const categoryLabels: Record<Category, string> = {
 
 const Results = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [answers] = useState<AnswerMap>(() => loadProgress());
+  const [isSaving, setIsSaving] = useState(false);
   
   // ดึงคำถามจากฐานข้อมูล
   const { data: allQuestions, isLoading } = useQuery({
@@ -80,6 +99,45 @@ const Results = () => {
   
   const top3 = useMemo(() => topNBusinesses(data.businessScores, 3), [data]);
 
+  // บันทึกผลการประเมินเมื่อมีข้อมูลครบ
+  useEffect(() => {
+    const saveResults = async () => {
+      if (
+        questions.length > 0 && 
+        Object.keys(answers).length > 0 && 
+        !isSaving &&
+        top3.length > 0
+      ) {
+        setIsSaving(true);
+        try {
+          const sessionId = getOrCreateSessionId();
+          
+          const assessmentResult: Omit<AssessmentResult, 'id' | 'created_at'> = {
+            session_id: sessionId,
+            top_business_types: top3.map(([business_type, score]) => ({ business_type, score })),
+            category_scores: data.categoryAverages,
+            all_business_scores: data.businessScores,
+            answers: answers
+          };
+
+          await saveAssessmentResult(assessmentResult);
+          console.log('Assessment result saved successfully');
+        } catch (error) {
+          console.error('Failed to save assessment result:', error);
+          toast({
+            title: "เกิดข้อผิดพลาด",
+            description: "ไม่สามารถบันทึกผลการประเมินได้",
+            variant: "destructive",
+          });
+        } finally {
+          setIsSaving(false);
+        }
+      }
+    };
+
+    saveResults();
+  }, [questions, answers, data, top3, isSaving, toast]);
+
   useEffect(() => {
     // If user lands here without answers, redirect
     if (Object.keys(answers).length === 0) navigate("/survey");
@@ -90,6 +148,7 @@ const Results = () => {
     try {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(QUESTIONS_KEY);
+      localStorage.removeItem(SESSION_KEY);
     } catch (error) {
       console.log('Error clearing localStorage:', error);
     }
@@ -125,7 +184,10 @@ const Results = () => {
       <main className="min-h-screen bg-background">
         <section className="max-w-xl mx-auto p-4 sm:p-6">
           <header className="rounded-md bg-secondary p-4 sm:p-5 mb-4">
-            <h1 className="text-lg font-semibold">การประเมินเสร็จสิ้น</h1>
+            <h1 className="text-lg font-semibold">
+              การประเมินเสร็จสิ้น
+              {isSaving && <span className="ml-2 text-sm text-muted-foreground">(กำลังบันทึก...)</span>}
+            </h1>
             <p className="text-sm text-muted-foreground">คุณได้ตอบครบ {Object.keys(answers).length} ข้อ</p>
           </header>
 
