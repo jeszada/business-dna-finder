@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,18 @@ const STORAGE_KEY = "bsa-progress";
 const Index = () => {
   const navigate = useNavigate();
   const [isStarted, setIsStarted] = useState(false);
+  const [hasExistingData, setHasExistingData] = useState(false);
+
+  useEffect(() => {
+    // เช็คว่ามีข้อมูลใน localStorage หรือไม่
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const answers = raw ? JSON.parse(raw) : {};
+      setHasExistingData(Object.keys(answers).length > 0);
+    } catch (error) {
+      setHasExistingData(false);
+    }
+  }, []);
 
   const handleStart = () => {
     // เคลียร์ข้อมูลเก่าก่อนเริ่มใหม่
@@ -26,22 +38,7 @@ const Index = () => {
   };
 
   const handleViewLatestResults = () => {
-    // ตรวจสอบว่ามีข้อมูลใน localStorage หรือไม่
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const answers = raw ? JSON.parse(raw) : {};
-      
-      if (Object.keys(answers).length > 0) {
-        // มีข้อมูล ไปหน้า results
-        navigate("/results");
-      } else {
-        // ไม่มีข้อมูล ไปหน้า survey
-        navigate("/survey");
-      }
-    } catch (error) {
-      // มีปัญหากับ localStorage ไปหน้า survey
-      navigate("/survey");
-    }
+    navigate("/results");
   };
 
   return (
@@ -85,13 +82,15 @@ const Index = () => {
                 {isStarted ? "กำลังเริ่มต้น..." : "เริ่มประเมิน DNA ทางธุรกิจ"}
               </Button>
               
-              <Button 
-                variant="outline" 
-                onClick={handleViewLatestResults}
-                className="w-full py-3 text-base font-medium rounded-lg"
-              >
-                ดูผลลัพธ์ล่าสุด
-              </Button>
+              {hasExistingData && (
+                <Button 
+                  variant="outline" 
+                  onClick={handleViewLatestResults}
+                  className="w-full py-3 text-base font-medium rounded-lg"
+                >
+                  ดูผลลัพธ์ล่าสุด
+                </Button>
+              )}
             </CardContent>
           </Card>
 
