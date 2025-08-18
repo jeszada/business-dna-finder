@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -86,6 +85,18 @@ const Results = () => {
     if (Object.keys(answers).length === 0) navigate("/survey");
   }, [answers, navigate]);
 
+  const handleStartNewSurvey = () => {
+    // เคลียร์ข้อมูลเก่าทั้งหมดก่อนเริ่มใหม่
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(QUESTIONS_KEY);
+    } catch (error) {
+      console.log('Error clearing localStorage:', error);
+    }
+    
+    navigate("/survey");
+  };
+
   if (isLoading) {
     return (
       <>
@@ -165,7 +176,7 @@ const Results = () => {
           </div>
 
           <div className="mt-8 flex items-center justify-between">
-            <Button variant="secondary" onClick={() => navigate("/survey")}>ทำใหม่</Button>
+            <Button variant="secondary" onClick={handleStartNewSurvey}>ทำใหม่</Button>
             <Button onClick={() => navigate("/")}>กลับหน้าแรก</Button>
           </div>
 
