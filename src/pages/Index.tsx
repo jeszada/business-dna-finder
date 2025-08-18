@@ -55,7 +55,7 @@ const Index = () => {
         <section className="w-full max-w-md">
           {/* Header Section */}
           <div className="text-center mb-8 animate-fade-in">
-            <p className="text-sm text-muted-foreground font-medium mb-2">
+            <p className="text-sm text-muted-foreground font-medium mb-0">
               Business Suitability Assessment
             </p>
             
