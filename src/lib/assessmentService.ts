@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { BusinessType, Category } from "@/data/business";
 
@@ -61,7 +62,9 @@ export async function getAssessmentStatistics(): Promise<{
       throw error;
     }
 
-    // Type assertion for the returned data
+    console.log('Raw data from database:', data);
+
+    // The function now returns a JSON object directly
     const result = data as {
       totalAssessments: number;
       businessTypeStats: Array<{ businessType: BusinessType; count: number; percentage: number }>;
